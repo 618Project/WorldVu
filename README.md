@@ -41,8 +41,9 @@ process implemented by Facebook takes about (45 seconds on Alex's Mac) to implem
 We would also be using the current implementation of the same algorithm in scanner as the starting point. The current implementation in python using the Scanner API performs the said computation from Facebook in a better way. We intend to 
 further accelerate the process by attempting paralellism across images/ redundancy between data from images and also utilsing
 the effective system architecture of the GPU in obtaining the best possible performance.
-<!---
+
 </span>
+<!---
 <span style="color:lightgray">
 If your project involves accelerating a compute-intensive application, describe the application or piece of the application you are going to implement in more detail. This description need only be a few paragraphs. It might be helpful to include a block diagram or pseudocode of the basic idea. An important detail is what aspects of the problem might benefit from parallelism? and why?
 </span>
@@ -101,8 +102,8 @@ Demo:
 In the demo, we would be comparing our implementation with the implementation from Facebook and perform a run-time 
 comparision of both of the video processing pipelines.Specifically, we would be taking a 360 degree frame seqeunce and feed it to both the pipelines and time the output generation sequence. In addition, we would also be generating some graphs to indicate
 the scalability and the performance bottlenecks identified in the implementation. 
-
 </span>
+
 # Platform Choice
 <!---
 <span style="color:lightgray">
