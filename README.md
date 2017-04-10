@@ -1,5 +1,5 @@
 <span style="color:black">
-# FB_360_Accelerator
+<h1> FB_360_Accelerator </h1>
 </span>
 <span style="color:lightgray">
 Please provide the title of your project, followed by the names of all team members. Teams may include up to two students. There are no exceptions to this rule.
