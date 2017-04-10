@@ -73,8 +73,8 @@ Describe the resources (type of computers, starter code, etc.) you will use. Wha
 </span>
 
 <span style="color:black">
-We would be utilizing the GPUs present in the Gates Cluster for our development since we anticipate our code to have longer runtimes and the iterations also to be on the higher side. We would be starting from the scanner code base found at :
-"insert link here" and also we would be referring to the original implementation of the facebook surround 360 pipeline found here " ". We would also be referring the documentatin and overall implementaiton of the scanner as well as the draft documentation from Facebook describing challenges of the same. We would also be using CUDA documentations for our coding 
+We plan to utilize the GPUs present in the Gates Cluster for our development since we anticipate our code to have longer runtimes and the iterations also to be on the higher side. We would be starting from the scanner code base found at :
+"insert link here" and also we would be referring to the original implementation of the facebook surround 360 pipeline found here " ". We would also be referring the documentation and overall implementaiton of the scanner as well as the draft documentation from Facebook describing challenges of the same. We would also be using CUDA documentations for our coding 
 references and looking into OpenCV and Vision Pipeline accelerator related papers to aid our efforts in designing the best
 possible accelerator for the said problem.
 </span>
@@ -100,9 +100,8 @@ Describe why the platform (computer and/or language) you have chosen is a good o
 </span>
 -->
 <span style="color:black">
-We would be implementing our algorithms for accelerators on GPU. Given that video consists of a number of frames and GPUs are 
-predominantly good at processing videos at a rapid pace, we would be using the GPU platform for our implementation. We do 
-notice that to perform a fair comparision, we would have to relatively estimate an improved refernce scale against our implementation for which we will be replicating a naive kernel that translates Facebook source code into CUDA and executes it.We will be improving the code with our novel algorithms and optimizations .
+We would be implementing our algorithms for acceleration on GPUs. Given that the input consists of a number of frames and GPUs are predominantly good at utilizing data parallelism at an impressive pace, we would be using the GPU platform for our implementation. <br/>
+"SURELY, NEEDED ?". We do notice that to be able to perform a fair comparision, we would have to relatively estimate an improved reference scale against our implementation for which we will be replicating a naive kernel that translates Facebook source code into CUDA and executes it. We will be improving the code with our novel algorithms and optimizations .
 
 
 # Schedule
