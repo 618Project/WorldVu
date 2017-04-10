@@ -35,10 +35,10 @@ We are going to implement two possible algorithms for a real-time computer visio
 # Background
 <span style="color:black">
 Our project involves the acceleration of the 360 degree video processing application. It takes the source set of frames
-from Facebook's Surround360 Cameras, which involves a rig of 12 cameras taking images in different directions, and finally 
-constructing the complete image from each of the 12 cameras and preserving the quality. The current state of the art 
-process implemented by Facebook takes about 45 seconds to implement this. We intend to accelerate the same.
-We would also be using the current implementation of the same algorithm in scanner as the starting point. The current implementation in python using the Scanner API performs the said computation from Facebook in 15 seconds. We intend to 
+from Facebook's Surround360 Cameras, which involves a rig of 14 cameras taking images in different directions, and finally 
+constructing the complete image from each of the 14 cameras and preserving the quality. The current state of the art 
+process implemented by Facebook takes about (45 seconds on Alex's Mac) to implement this. We intend to accelerate the same.
+We would also be using the current implementation of the same algorithm in scanner as the starting point. The current implementation in python using the Scanner API performs the said computation from Facebook in a better way. We intend to 
 further accelerate the process by attempting paralellism across images/ redundancy between data from images and also utilsing
 the effective system architecture of the GPU in obtaining the best possible performance.
 <!---
@@ -83,15 +83,25 @@ possible accelerator for the said problem.
 <span style="color:lightgray">
 Describe the deliverables or goals of your project.
 </span>
-<span style="color:lightgray">
-This is by far the most important section of the proposal:
-</span>
+
 <span style="color:lightgray">
 Separate your goals into what you PLAN TO ACHIEVE (what you believe you must get done to have a successful project and get the grade you expect) and an extra goal or two that you HOPE TO ACHIEVE if the project goes really well and you get ahead of schedule. It may not be possible to state precise performance goals at this time, but we encourage you be as precise as possible. If you do state a goal, give some justification of why you think you can achieve it. (e.g., I hope to speed up my starter code 10x, because if I did it would run in real-time.)
 If applicable, describe the demo you plan to show at the parallelism computation (will it be an interactive demo? will you show an output of the program that is really neat? will you show speedup graphs?). Specifically, what will you show us that will demonstrate you did a good job?
 If your project is an analysis project, what are you hoping to learn about the workload or system being studied? What question(s) do you plan to answer in your analysis?
 Systems project proposals should describe what the system will be capable of and what performance is hoped to be achieved.
 IN GENERAL: Imagine that I didn't give you a grading script on assignments 2, 3, or 4. Imagine you did the entire assignment, made it as fast as you could, and then turned it in. You wouldn't have any idea if you'd done a good job!!! That's the situation you are in for the final project. And that's the situation I'm in when grading your final project. As part of your project plan, and ONE OF THE FIRST THINGS YOU SHOULD DO WHEN YOU GET STARTED WORKING is implement the test harnesses and/or baseline "reference" implementations for your project. Then, for the rest of your project you always have the ability to run your optimized code and obtain a comparison.
+</span>
+
+<span style="color:black">
+We plan to achieve a significant performance improvement (at least a 2.5X) over the current Facebook Surround360 pipeline in the order.
+Our stretch goal is to be able to bring down the frame processing time to 1 second from 45 seconds. Being able to process videos of duration (1 min) currently takes around 1350 minutes. Reducing the processing time from 45 seconds to 15 seconds will reduce the 1 min video processing duration to 450 minutes. So this is the achievable goal that we are setting ourselves with. 
+Our stretch goal is to bring down the processing from 45 seconds to 1 second and reduce the processing time from 1350 minutes to 30 minutes to process the video. 
+
+Demo: 
+In the demo, we would be comparing our implementation with the implementation from Facebook and perform a run-time 
+comparision of both of the video processing pipelines.Specifically, we would be taking a 360 degree frame seqeunce and feed it to both the pipelines and time the output generation sequence. In addition, we would also be generating some graphs to indicate
+the scalability and the performance bottlenecks identified in the implementation. 
+
 </span>
 # Platform Choice
 <!---
@@ -100,13 +110,12 @@ Describe why the platform (computer and/or language) you have chosen is a good o
 </span>
 -->
 <span style="color:black">
-We would be implementing our algorithms for acceleration on GPUs. Given that the input consists of a number of frames and GPUs are predominantly good at utilizing data parallelism at an impressive pace, we would be using the GPU platform for our implementation. <br/>
-"SURELY, NEEDED ?". We do notice that to be able to perform a fair comparision, we would have to relatively estimate an improved reference scale against our implementation for which we will be replicating a naive kernel that translates Facebook source code into CUDA and executes it. We will be improving the code with our novel algorithms and optimizations .
+We would be implementing our algorithms for acceleration on GPUs. Given that the input consists of a number of frames and GPUs are predominantly good at utilizing data parallelism at an impressive pace, we would be using the GPU platform for our implementation. We do notice that to be able to perform a fair comparision, we would have to relatively estimate an improved reference scale against our implementation for which we will be replicating a naive kernel that translates Facebook source code into CUDA and executes it. We will be improving the code with our novel algorithms and optimizations.
 </span> 
 
 # Schedule
 <span style="color:black">
-1.	Get the Surround360 pipeline compiling (this seems to be a useful repo for setting up the dependencies but I have not tried it: https://github.com/holgr/build_surround360)
+1.	Get the Surround360 pipeline compiling (We will be using this repo to setup the dependencies. https://github.com/holgr/build_surround360)
 2.	Get the pipeline running over the 2 frame sample dataset they provide (we are working on getting a larger dataset)
 3.	Do a deep dive into the performance of the pipeline, determining timing and where the bottlenecks are.
 4.	Figure out some small experiments to run that you think might improve performance in order to verify your hypothesis about what the bottlenecks are.
