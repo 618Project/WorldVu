@@ -7,7 +7,8 @@ Please provide the title of your project, followed by the names of all team memb
 
 <span style="color:black">
 The title of our project is "Insert title here".
-
+</span>
+<span style="color:black">
 Team Members(in alphabetical order): Harish Dattatraya Dixit , Sampath Chanda. 
 </span>
 
@@ -41,7 +42,6 @@ process implemented by Facebook takes about (45 seconds on Alex's Mac) to implem
 We would also be using the current implementation of the same algorithm in scanner as the starting point. The current implementation in python using the Scanner API performs the said computation from Facebook in a better way. We intend to 
 further accelerate the process by attempting paralellism across images/ redundancy between data from images and also utilsing
 the effective system architecture of the GPU in obtaining the best possible performance.
-
 </span>
 <!---
 <span style="color:lightgray">
@@ -97,7 +97,8 @@ IN GENERAL: Imagine that I didn't give you a grading script on assignments 2, 3,
 We plan to achieve a significant performance improvement (at least a 2.5X) over the current Facebook Surround360 pipeline in the order.
 Our stretch goal is to be able to bring down the frame processing time to 1 second from 45 seconds. Being able to process videos of duration (1 min) currently takes around 1350 minutes. Reducing the processing time from 45 seconds to 15 seconds will reduce the 1 min video processing duration to 450 minutes. So this is the achievable goal that we are setting ourselves with. 
 Our stretch goal is to bring down the processing from 45 seconds to 1 second and reduce the processing time from 1350 minutes to 30 minutes to process the video. 
-
+</span>
+<span style="color:black">
 Demo: 
 In the demo, we would be comparing our implementation with the implementation from Facebook and perform a run-time 
 comparision of both of the video processing pipelines.Specifically, we would be taking a 360 degree frame seqeunce and feed it to both the pipelines and time the output generation sequence. In addition, we would also be generating some graphs to indicate
