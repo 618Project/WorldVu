@@ -1,9 +1,14 @@
+<span style="color:black">
 # FB_360_Accelerator
+</span>
 <span style="color:lightgray">
 Please provide the title of your project, followed by the names of all team members. Teams may include up to two students. There are no exceptions to this rule.
 </span>
 
+<span style="color:black">
 # Summary
+</span>
+
 <span style="color:lightgray">
 Summarize your project in no more than 2-3 sentences. Describe what you plan to do and what parallel systems you will be working with. Example one-liners include (you should add a bit more detail):
 </span>
@@ -14,13 +19,15 @@ We are going to create optimized implementations of sparse-matrix multiplication
 We are going to back-engineer the unpublished machine specifications of the GPU in the tablet my partner just purchased.
 We are going to implement two possible algorithms for a real-time computer vision application on a mobile device and measure their energy consumption in the lab.
 </span>
-
+<span style="color:black">
 # Background
+</span>
 <span style="color:lightgray">
 If your project involves accelerating a compute-intensive application, describe the application or piece of the application you are going to implement in more detail. This description need only be a few paragraphs. It might be helpful to include a block diagram or pseudocode of the basic idea. An important detail is what aspects of the problem might benefit from parallelism? and why?
 </span>
-
+<span style="color:black">
 # The Challenge
+</span>
 <span style="color:lightgray">
 Describe why the problem is challenging. What aspects of the problem might make it difficult to parallelize? In other words, what to you hope to learn by doing the project?
 </span>
@@ -29,12 +36,16 @@ Describe the workload: what are the dependencies, what are its memory access cha
 Describe constraints: What are the properties of the system that make mapping the workload to it challenging?
 </span>
 
+<span style="color:black">
 # Resources
+</span>
 <span style="color:lightgray">
 Describe the resources (type of computers, starter code, etc.) you will use. What code base will you start from? Are you starting from scratch or using an existing piece of code? Is there a book or paper that you are using as a reference (if so, provide a citation)? Are there any other resources you need, but haven't figured out how to obtain yet? Could you benefit from access to any special machines?
 </span>
 
+<span style="color:black">
 # Goals and Deliverables
+</span>
 <span style="color:lightgray">
 Describe the deliverables or goals of your project.
 </span>
@@ -49,12 +60,16 @@ Systems project proposals should describe what the system will be capable of and
 IN GENERAL: Imagine that I didn't give you a grading script on assignments 2, 3, or 4. Imagine you did the entire assignment, made it as fast as you could, and then turned it in. You wouldn't have any idea if you'd done a good job!!! That's the situation you are in for the final project. And that's the situation I'm in when grading your final project. As part of your project plan, and ONE OF THE FIRST THINGS YOU SHOULD DO WHEN YOU GET STARTED WORKING is implement the test harnesses and/or baseline "reference" implementations for your project. Then, for the rest of your project you always have the ability to run your optimized code and obtain a comparison.
 </span>
 
+<span style="color:black">
 # Platform Choice
+</span>
 <span style="color:lightgray">
 Describe why the platform (computer and/or language) you have chosen is a good one for your needs. Why does it make sense to use this parallel system for the workload you have chosen?
 </span>
 
+<span style="color:black">
 # Schedule
+</span>
 <span style="color:lightgray">
 Produce a schedule for your project. Your schedule should have at least one item to do per week. List what you plan to get done each week from now until the parallelism competition in order to meet your project goals. Keep in mind that due to other classes, you'll have more time to work some weeks than others (work that into the schedule). You will need to re-evaluate your progress at the end of each week and update this schedule accordingly. Note the intermediate checkpoint deadline is April 25th. In your schedule we encourage you to be precise as precise as possible. It's often helpful to work backward in time from your deliverables and goals, writing down all the little things you'll need to do (establish the dependencies!).
 </span>
