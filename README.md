@@ -95,10 +95,11 @@ IN GENERAL: Imagine that I didn't give you a grading script on assignments 2, 3,
 </span>
 
 <span style="color:black">
-We plan to achieve a significant performance improvement (at least a 2.5X) over the current Facebook Surround360 pipeline in the order.
+We plan to achieve a significant performance improvement (at least a 3X) over the current Facebook Surround360 pipeline in the order.
 Our stretch goal is to be able to bring down the frame processing time to 1 second from 45 seconds. Being able to process videos of duration (1 min) currently takes around 1350 minutes. Reducing the processing time from 45 seconds to 15 seconds will reduce the 1 min video processing duration to 450 minutes. So this is the achievable goal that we are setting ourselves with. 
 Our stretch goal is to bring down the processing from 45 seconds to 1 second and reduce the processing time from 1350 minutes to 30 minutes to process the video. 
 </span>
+
 <span style="color:black">
 Demo: 
 In the demo, we would be comparing our implementation with the implementation from Facebook and perform a run-time 
