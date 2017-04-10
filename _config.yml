@@ -1,6 +1,6 @@
 theme: jekyll-theme-cayman
 title: WorldVu
 description: A 360 Degree Video Processing Accelerator.
-header {
-  background-image: https://cdn1.tnwcdn.com/wp-content/blogs.dir/1/files/2016/04/facebook-360-surround.jpg;
-}
+
+image:
+  background: https://cdn1.tnwcdn.com/wp-content/blogs.dir/1/files/2016/04/facebook-360-surround.jpg;
