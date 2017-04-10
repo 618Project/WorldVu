@@ -1,11 +1,4 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/hdeathbycode/OptSurround/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-
-# OptSurround
+# FB_360_Accel
 Please provide the title of your project, followed by the names of all team members. Teams may include up to two students. There are no exceptions to this rule.
 
 # SUMMARY
@@ -49,7 +42,11 @@ Produce a schedule for your project. Your schedule should have at least one item
 
 
 
+## Welcome to GitHub Pages
 
+You can use the [editor on GitHub](https://github.com/hdeathbycode/OptSurround/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+
+Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
 
