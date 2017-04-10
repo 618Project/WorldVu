@@ -102,9 +102,17 @@ Describe why the platform (computer and/or language) you have chosen is a good o
 <span style="color:black">
 We would be implementing our algorithms for acceleration on GPUs. Given that the input consists of a number of frames and GPUs are predominantly good at utilizing data parallelism at an impressive pace, we would be using the GPU platform for our implementation. <br/>
 "SURELY, NEEDED ?". We do notice that to be able to perform a fair comparision, we would have to relatively estimate an improved reference scale against our implementation for which we will be replicating a naive kernel that translates Facebook source code into CUDA and executes it. We will be improving the code with our novel algorithms and optimizations .
-
+</span> 
 
 # Schedule
+<span style="color:black">
+1.	Get the Surround360 pipeline compiling (this seems to be a useful repo for setting up the dependencies but I have not tried it: https://github.com/holgr/build_surround360)
+2.	Get the pipeline running over the 2 frame sample dataset they provide (we are working on getting a larger dataset)
+3.	Do a deep dive into the performance of the pipeline, determining timing and where the bottlenecks are.
+4.	Figure out some small experiments to run that you think might improve performance in order to verify your hypothesis about what the bottlenecks are.
+5.	Fully implement the intended optimizations (for example, making better use of cache locality/using GPUs)
+</span>
+
 <!---
 <span style="color:lightgray">
 Produce a schedule for your project. Your schedule should have at least one item to do per week. List what you plan to get done each week from now until the parallelism competition in order to meet your project goals. Keep in mind that due to other classes, you'll have more time to work some weeks than others (work that into the schedule). You will need to re-evaluate your progress at the end of each week and update this schedule accordingly. Note the intermediate checkpoint deadline is April 25th. In your schedule we encourage you to be precise as precise as possible. It's often helpful to work backward in time from your deliverables and goals, writing down all the little things you'll need to do (establish the dependencies!).
