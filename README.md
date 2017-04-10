@@ -4,6 +4,7 @@
 <span style="color:lightgray">
 Please provide the title of your project, followed by the names of all team members. Teams may include up to two students. There are no exceptions to this rule.
 </span>
+
 <span style="color:black">
 The title of our project is "Insert title here". 
 Team Members(in alphabetical order): Harish Dattatraya Dixit , Sampath Chanda 
@@ -15,6 +16,7 @@ Team Members(in alphabetical order): Harish Dattatraya Dixit , Sampath Chanda
 <span style="color:lightgray">
 Summarize your project in no more than 2-3 sentences. Describe what you plan to do and what parallel systems you will be working with. Example one-liners include (you should add a bit more detail):
 </span>
+
 <span style="color:black">
 Our project goal is to accelerate the (360 degree) video processing using source video feed from Facebook Surround 360
 and also referencing the correctness of the code with the Facebook implementation. We intend to accelerate the processing
