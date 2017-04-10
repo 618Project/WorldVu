@@ -1,6 +1,7 @@
 # FB_360_Accelerator
+<span style="color:lightgray">
 Please provide the title of your project, followed by the names of all team members. Teams may include up to two students. There are no exceptions to this rule.
-
+</span>
 # SUMMARY
 Summarize your project in no more than 2-3 sentences. Describe what you plan to do and what parallel systems you will be working with. Example one-liners include (you should add a bit more detail):
 
