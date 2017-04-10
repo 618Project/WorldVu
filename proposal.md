@@ -75,7 +75,7 @@ Describe the resources (type of computers, starter code, etc.) you will use. Wha
 
 <span style="color:black">
 We plan to utilize the GPUs present in the Gates Cluster for our development since we anticipate our code to have longer runtimes and the iterations also to be on the higher side. We would be starting from the Facebook code base found at :
-"insert link here". We would also be referring the documentation and overall implementaiton of the scanner as well as the draft documentation from Facebook describing challenges of the same. We would also be using CUDA documentations for our coding 
+https://github.com/facebook/Surround360. We would also be referring the documentation and overall implementation of the scanner from Alex Poms (https://github.com/scanner-research/Surround360) as well as the draft documentation from Facebook describing challenges of the same. We would also be using CUDA documentations for our coding 
 references and looking into OpenCV and Vision Pipeline accelerator related papers to aid our efforts in designing the best
 possible accelerator for the said problem.
 </span>
