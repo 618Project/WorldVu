@@ -1,4 +1,3 @@
-
 # WorldVu
 
 <span style="color:lightgray">
@@ -6,7 +5,7 @@ Please provide the title of your project, followed by the names of all team memb
 </span>
 
 <span style="color:black">
-The title of our project is "Insert title here".
+The title of our project is "WorldVu", which is a 360 degree frame processing accelerator pipeline.
 </span>
 
 <span style="color:black">
