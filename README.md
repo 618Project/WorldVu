@@ -6,7 +6,8 @@ Please provide the title of your project, followed by the names of all team memb
 </span>
 
 <span style="color:black">
-The title of our project is "Insert title here". 
+The title of our project is "Insert title here".
+
 Team Members(in alphabetical order): Harish Dattatraya Dixit , Sampath Chanda 
 </span>
 
@@ -97,11 +98,12 @@ IN GENERAL: Imagine that I didn't give you a grading script on assignments 2, 3,
 <span style="color:lightgray">
 Describe why the platform (computer and/or language) you have chosen is a good one for your needs. Why does it make sense to use this parallel system for the workload you have chosen?
 </span>
+-->
 <span style="color:black">
 We would be implementing our algorithms for accelerators on GPU. Given that video consists of a number of frames and GPUs are 
 predominantly good at processing videos at a rapid pace, we would be using the GPU platform for our implementation. We do 
 notice that to perform a fair comparision, we would have to relatively estimate an improved refernce scale against our implementation for which we will be replicating a naive kernel that translates Facebook source code into CUDA and executes it.We will be improving the code with our novel algorithms and optimizations .
--->
+
 
 # Schedule
 <!---
