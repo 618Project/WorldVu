@@ -119,10 +119,10 @@ We would be implementing our algorithms for acceleration on GPUs. Given that the
 # Schedule
 
 <span style="color:black">
-1.	Get the Surround360 pipeline compiling (We will be using this repo to setup the dependencies. https://github.com/holgr/build_surround360)
-2.	Get the pipeline running over the 2 frame sample dataset they provide (we are working on getting a larger dataset)
-3.	Do a deep dive into the performance of the pipeline, determining timing and where the bottlenecks are.
-4.	Figure out some small experiments to run that might improve performance in order to verify your hypothesis about what the bottlenecks are.
+1.	Get the Surround360 pipeline to compile (We will be using this repo to setup the dependencies. https://github.com/holgr/build_surround360)
+2.	Get the pipeline running over the 2 frame sample dataset that is available.
+3.	Do a deep dive into the performance of the pipeline, determining timing and identify performance bottlenecks.
+4.	Perform small experiments that might improve performance in order to verify our hypothesis about the bottlenecks.
 5.	Fully implement the intended optimizations (for example, making better use of cache locality/using GPUs)
 
 
