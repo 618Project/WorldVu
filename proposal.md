@@ -39,8 +39,7 @@ We are going to implement two possible algorithms for a real-time computer visio
 Our project involves the acceleration of the 360 degree frame processing application. It takes the source set of frames
 from Facebook's Surround360 Cameras, which involves a rig of 14 cameras taking images in different directions, and finally 
 constructing the complete image from each of the 14 cameras and preserving the quality. The current state of the art 
-process implemented by Facebook takes about (45 seconds on Alex's Mac) to implement this. We intend to accelerate the same.
-We would also be using the current implementation of the same algorithm by Facebook as the starting point. We intend to 
+process implemented by Facebook takes about (45 seconds as per info from Alex) to implement this. We intend to accelerate the same.We would also be using the current implementation of the same algorithm by Facebook as the starting point. We intend to 
 further accelerate the process by attempting paralellism across images/ redundancy between data from images and also utilsing
 the effective system architecture of the GPU in obtaining the best possible performance.
 </span>
