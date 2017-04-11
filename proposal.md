@@ -81,10 +81,11 @@ possible accelerator for the said problem.
 </span>
 
 # Goals and Deliverables
+<!---
 <span style="color:lightgray">
 Describe the deliverables or goals of your project.
 </span>
-<!---
+
 <span style="color:lightgray">
 Separate your goals into what you PLAN TO ACHIEVE (what you believe you must get done to have a successful project and get the grade you expect) and an extra goal or two that you HOPE TO ACHIEVE if the project goes really well and you get ahead of schedule. It may not be possible to state precise performance goals at this time, but we encourage you be as precise as possible. If you do state a goal, give some justification of why you think you can achieve it. (e.g., I hope to speed up my starter code 10x, because if I did it would run in real-time.)
 If applicable, describe the demo you plan to show at the parallelism computation (will it be an interactive demo? will you show an output of the program that is really neat? will you show speedup graphs?). Specifically, what will you show us that will demonstrate you did a good job?
