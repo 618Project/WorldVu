@@ -84,7 +84,7 @@ possible accelerator for the said problem.
 <span style="color:lightgray">
 Describe the deliverables or goals of your project.
 </span>
-
+<!---
 <span style="color:lightgray">
 Separate your goals into what you PLAN TO ACHIEVE (what you believe you must get done to have a successful project and get the grade you expect) and an extra goal or two that you HOPE TO ACHIEVE if the project goes really well and you get ahead of schedule. It may not be possible to state precise performance goals at this time, but we encourage you be as precise as possible. If you do state a goal, give some justification of why you think you can achieve it. (e.g., I hope to speed up my starter code 10x, because if I did it would run in real-time.)
 If applicable, describe the demo you plan to show at the parallelism computation (will it be an interactive demo? will you show an output of the program that is really neat? will you show speedup graphs?). Specifically, what will you show us that will demonstrate you did a good job?
@@ -92,7 +92,7 @@ If your project is an analysis project, what are you hoping to learn about the w
 Systems project proposals should describe what the system will be capable of and what performance is hoped to be achieved.
 IN GENERAL: Imagine that I didn't give you a grading script on assignments 2, 3, or 4. Imagine you did the entire assignment, made it as fast as you could, and then turned it in. You wouldn't have any idea if you'd done a good job!!! That's the situation you are in for the final project. And that's the situation I'm in when grading your final project. As part of your project plan, and ONE OF THE FIRST THINGS YOU SHOULD DO WHEN YOU GET STARTED WORKING is implement the test harnesses and/or baseline "reference" implementations for your project. Then, for the rest of your project you always have the ability to run your optimized code and obtain a comparison.
 </span>
-
+-->
 <span style="color:black">
 We plan to achieve a significant performance improvement (at least a 3X) over the current Facebook Surround360 pipeline in the order.
 Our stretch goal is to be able to bring down the frame processing time to 1 second from 45 seconds. Being able to process videos of duration (1 min) currently takes around 1350 minutes. Reducing the processing time from 45 seconds to 15 seconds will reduce the 1 min video processing duration to 450 minutes. So this is the achievable goal that we are setting ourselves with. 
