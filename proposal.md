@@ -105,7 +105,7 @@ Our stretch goal is to bring down the processing from 45 seconds to 1 second and
 <span style="color:black">
 Demo: 
 In the demo, we would be comparing our implementation with the implementation from Facebook and perform a run-time 
-comparision of both of the video processing pipelines.Specifically, we would be taking a 360 degree frame seqeunce and feed it to both the pipelines and time the output generation sequence. In addition, we would also be generating some graphs to indicate
+comparision of both of the frame processing pipelines.Specifically, we would be taking a 360 degree frame seqeunce and feed it to both the pipelines and time the output generation sequence. In addition, we would also be generating some graphs to indicate
 the scalability and the performance bottlenecks identified in the implementation. 
 </span>
 
