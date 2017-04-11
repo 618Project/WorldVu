@@ -1,9 +1,10 @@
 # WorldVu
 
+<!---
 <span style="color:lightgray">
 Please provide the title of your project, followed by the names of all team members. Teams may include up to two students. There are no exceptions to this rule.
 </span>
-
+-->
 <span style="color:black">
 The title of our project is "WorldVu", which is a 360 degree frame processing accelerator pipeline.
 </span>
@@ -14,13 +15,13 @@ Team Members(in alphabetical order): Harish Dattatraya Dixit , Sampath Chanda.
 
 
 # Summary
-
+<!---
 <span style="color:lightgray">
 Summarize your project in no more than 2-3 sentences. Describe what you plan to do and what parallel systems you will be working with. Example one-liners include (you should add a bit more detail):
 </span>
-
+-->
 <span style="color:black">
-Our project goal is to accelerate the (360 degree) video processing using source video feed from Facebook Surround 360
+Our project goal is to accelerate the (360 degree) frame processing using source video feed from Facebook Surround 360
 and also referencing the correctness of the code with the Facebook implementation. We intend to accelerate the processing
 using GPUs as part of the effort. 
 </span>
@@ -35,7 +36,7 @@ We are going to implement two possible algorithms for a real-time computer visio
 -->
 # Background
 <span style="color:black">
-Our project involves the acceleration of the 360 degree video processing application. It takes the source set of frames
+Our project involves the acceleration of the 360 degree frame processing application. It takes the source set of frames
 from Facebook's Surround360 Cameras, which involves a rig of 14 cameras taking images in different directions, and finally 
 constructing the complete image from each of the 14 cameras and preserving the quality. The current state of the art 
 process implemented by Facebook takes about (45 seconds on Alex's Mac) to implement this. We intend to accelerate the same.
@@ -69,10 +70,11 @@ be a challenging as well as a rewarding project utilizing variety of aspects tha
 </span>
 
 # Resources
+<!---
 <span style="color:lightgray">
 Describe the resources (type of computers, starter code, etc.) you will use. What code base will you start from? Are you starting from scratch or using an existing piece of code? Is there a book or paper that you are using as a reference (if so, provide a citation)? Are there any other resources you need, but haven't figured out how to obtain yet? Could you benefit from access to any special machines?
 </span>
-
+-->
 <span style="color:black">
 We plan to utilize the GPUs present in the Gates Cluster for our development since we anticipate our code to have longer runtimes and the iterations also to be on the higher side. We would be starting from the Facebook code base found at :
 https://github.com/facebook/Surround360. We would also be referring the documentation and overall implementation of the scanner from Alex Poms (https://github.com/scanner-research/Surround360) as well as the draft documentation from Facebook describing challenges of the same. We would also be using CUDA documentations for our coding 
