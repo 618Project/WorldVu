@@ -1,0 +1,19 @@
+{
+    "cam0": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp0.json", 
+    "cam1": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp1.json", 
+    "cam10": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp10.json", 
+    "cam11": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp11.json", 
+    "cam12": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp12.json", 
+    "cam13": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp13.json", 
+    "cam14": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp14.json", 
+    "cam15": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp15.json", 
+    "cam16": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp16.json", 
+    "cam2": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp2.json", 
+    "cam3": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp3.json", 
+    "cam4": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp4.json", 
+    "cam5": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp5.json", 
+    "cam6": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp6.json", 
+    "cam7": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp7.json", 
+    "cam8": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp8.json", 
+    "cam9": "/Users/sam/Downloads/Surround360-master/surround360_render/res/config/isp/isp9.json"
+}
