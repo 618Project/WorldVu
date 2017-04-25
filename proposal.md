@@ -13,6 +13,9 @@ The title of our project is "WorldVu", which is a 360 degree frame processing ac
 Team Members: Sampath Chanda, Harish Dattatraya Dixit. 
 </span>
 
+<br/>
+For Project main page (all information including proposal, checkpoint, etc.,), refer to:
+<a href="https://618project.github.io/WorldVu/" style="background:#D8D8D8"> Project Home </a>
 
 # Summary
 <!---
