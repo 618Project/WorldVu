@@ -10,7 +10,7 @@ The title of our project is "WorldVu", which is a 360 degree frame processing ac
 </span>
 
 <span style="color:black">
-Team Members(in alphabetical order): Harish Dattatraya Dixit , Sampath Chanda. 
+Team Members: Sampath Chanda, Harish Dattatraya Dixit. 
 </span>
 
 
