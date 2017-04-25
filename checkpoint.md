@@ -1,0 +1,31 @@
+# Checkpoint Report
+
+Team: Sampath Chanda (schanda) and Harish Dattatreya Dixit (hdixit)
+
+## Current Status
+We have compiled the Surround360 pipeline and setup all the dependencies required on local machine to run the code from Facebook Surround360 [repo](https://github.com/facebook/Surround360).
+Also, since one of us don't have an NVIDIA GPU on local machine (schanda), we worked with a TA to setup all the dependencies to get the code from Facebook compiled and running on a GHC machine.
+However, due to the large amount of intermediate data produced, and with current AFS storage limitations, we are unable to render the frames on GHC machines.
+We got a ticket raised (by TA) for extension of AFS storage limit and are waiting for a reply on that.
+Further, we got the pipeline to be running over the 2 frame dataset provided in the same repository using local machine. The running time is observed to be around 45-55 seconds for rendering 2 frames.
+
+## Goals and Deliverables
+We have started with the goal of looking into optimizations to the current available code of Surround360 and identified few potential performance hotspots.
+We are taking a deeper dive into the code to understand, analyze and time the performance hotspots which could help us evaluate and make optimizations to accelerate the rendering.
+
+For the next half of the project, we will concentrate on making a GPU implementation of the rendering algorithm.
+We plan to use the current running CPU implementation as our Test harness to check the correctness of our GPU implementation.
+Later, we would stress on performance optimizations to accelerate the GPU implementation.
+
+During the final demo and in the parallelism competition, we plan to contrast the performance of the current CPU version of Surround360 rendering against our accelerated CUDA implementation.
+We aim to achieve at least a 3X speedup for rendering. 
+
+## Schedule
+| Timeline         |    Tasks      | Status|
+| ---------------- |---------------|:-----:|
+| Apr 2  - Apr 8   | Research on project ideas, analyze and understand feasibility of implementation in project timeframe, draft project proposal for submission | DONE  |
+| Apr 9  - Apr 15  | Revise the project proposal and submit. Setting up all dependencies required for Facebook Surround360  |  DONE  |
+| Apr 16 - Apr 22  | Get the available code from Surround360 repo to compile and run on the 2 frames dataset available      |  DONE  |
+| Apr 23 - Apr 29  | Deep dive into the current CPU implementation, identify performance bottlenecks and potential sources of optimizations | In progress|
+| Apr 30 - May 6   | Time and evaluate the performance hotspots. Start with implementing the renderer counterpart in CUDA ||
+| May 7  - May 12  | Evaluate correctness of GPU implementation against the already available CPU implementation. Making optimizations for reaching our performance target ||
