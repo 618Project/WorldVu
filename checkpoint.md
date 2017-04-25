@@ -1,6 +1,6 @@
 # Checkpoint Report
 
-Team: Sampath Chanda (schanda) and Harish Dattatreya Dixit (hdixit)
+Team: Sampath Chanda (schanda) and Harish Dattatraya Dixit (hdixit)
 
 ## Current Status
 We have compiled the Surround360 pipeline and setup all the dependencies required on local machine to run the code from Facebook Surround360 [repo](https://github.com/facebook/Surround360).
