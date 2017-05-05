@@ -1,3 +1,5 @@
+#! /bin/bash
+
 sudo apt-get --assume-yes install software-properties-common
 sudo add-apt-repository ppa:george-edison55/cmake-3.x
 sudo apt-get --assume-yes update
@@ -56,7 +58,7 @@ git checkout 970f749
 mkdir cmake_build
 cd cmake_build
 cmake -DLLVM_DIR=$HOME/llvm3.7/build/share/llvm/cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_VERSION=37 -DWARNINGS_AS_ERRORS=OFF ..
-sudo apt-get install libboost-dev
+sudo apt-get --assume-yes install libboost-dev
 cd ~
 git clone https://github.com/google/double-conversion.git
 cd double-conversion
@@ -71,8 +73,17 @@ wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
 tar zxf release-1.8.0.tar.gz
 rm -f release-1.8.0.tar.gz
 mv googletest-release-1.8.0 gtest
-cd ..
-sudo apt --assume-yes install autoconf
-autoreconf -ivf
+sudo apt-get install libiberty-dev
 
-sudo apt-get --assume-yes libtool shtool autogen
+cd ~/folly/folly
+sudo apt install autoconf
+sudo apt-get --assume-yes install libtool
+sudo apt-get --assume-yes install libssl-dev
+autoreconf -ivf
+sudo apt-get install --assume-yes libboost-all-dev
+sudo apt-get install --assume-yes libevent-dev
+./configure
+make
+make check
+sudo make install
+
