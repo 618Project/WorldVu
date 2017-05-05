@@ -3,7 +3,7 @@ sudo add-apt-repository ppa:george-edison55/cmake-3.x
 sudo apt-get --assume-yes update
 sudo apt-get --assume-yes install cmake && sudo apt-get --assume-yes upgrade cmake
 sudo apt-get --assume-yes install git
-sudo apt install subversion
+sudo apt --assume-yes install subversion
 sudo apt-get --assume-yes update
 sudo apt-get --assume-yes install python python-dev
 sudo apt-get --assume-yes install libgflags2v5 libgflags-dev
@@ -34,7 +34,7 @@ sudo pip install Gooey
 sudo apt-get --assume-yes install python-wxgtk3.0
 echo "deb http://archive.ubuntu.com/ubuntu wily main universe" | sudo tee /etc/apt/sources.list.d/wily-copies.list
 sudo apt update
-sudo apt install python-wxgtk2.8
+sudo apt --assume-yes install python-wxgtk2.8
 sudo rm /etc/apt/sources.list.d/wily-copies.list
 sudo apt update
 sudo apt-get --assume-yes install python-pil
@@ -56,3 +56,23 @@ git checkout 970f749
 mkdir cmake_build
 cd cmake_build
 cmake -DLLVM_DIR=$HOME/llvm3.7/build/share/llvm/cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_VERSION=37 -DWARNINGS_AS_ERRORS=OFF ..
+sudo apt-get install libboost-dev
+cd ~
+git clone https://github.com/google/double-conversion.git
+cd double-conversion
+cmake -DBUILD_SHARED_LIBS=ON .
+make
+sudo make install
+cd ~
+git clone https://github.com/facebook/folly.git
+cd folly/folly/test
+rm -rf gtest
+wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
+tar zxf release-1.8.0.tar.gz
+rm -f release-1.8.0.tar.gz
+mv googletest-release-1.8.0 gtest
+cd ..
+sudo apt --assume-yes install autoconf
+autoreconf -ivf
+
+sudo apt-get --assume-yes libtool shtool autogen
