@@ -35,6 +35,11 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
+#include <ctime>
+
+// NOTE: BY SCHANDA
+// #include "checkpoint.h"
+
 using namespace cv;
 using namespace std;
 using namespace surround360;
@@ -485,6 +490,7 @@ void prepareNovelViewGeneratorThread(
     Mat* imageR,
     NovelViewGenerator* novelViewGen) {
 
+  // time_checkpoint ("");
   Mat overlapImageL = (*imageL)(Rect(
     imageL->cols - overlapImageWidth, 0, overlapImageWidth, imageL->rows));
   Mat overlapImageR = (*imageR)(Rect(0, 0, overlapImageWidth, imageR->rows));
@@ -496,6 +502,7 @@ void prepareNovelViewGeneratorThread(
   imwriteExceptionOnFail(
     FLAGS_output_data_dir + "/flow_images/overlap_" + std::to_string(leftIdx) + "_R.png",
     overlapImageR);
+  // time_checkpoint("first");
 
   // read the previous frame's flow results, if available
   Mat prevFrameFlowLtoR, prevFrameFlowRtoL, prevOverlapImageL, prevOverlapImageR;
@@ -514,6 +521,8 @@ void prepareNovelViewGeneratorThread(
       -1);
     VLOG(1) << "Loaded previous frame's flow OK";
   }
+  // time_checkpoint("second");
+  // ~11/12 seconds hotspot
 
   // this is the call to actually compute optical flow
   novelViewGen->prepare(
@@ -523,6 +532,7 @@ void prepareNovelViewGeneratorThread(
     prevFrameFlowRtoL,
     prevOverlapImageL,
     prevOverlapImageR);
+  // time_checkpoint("third");
 
   // get the results of flow and save them. we will need these for temporal regularization
   const Mat flowLtoR = novelViewGen->getFlowLtoR();
@@ -533,6 +543,7 @@ void prepareNovelViewGeneratorThread(
   saveFlowToFile(
     flowRtoL,
     FLAGS_output_data_dir + "/flow/flowRtoL_" + std::to_string(leftIdx) + ".bin");
+  // time_checkpoint("fourth");
 }
 
 // a "chunk" is the portion from a pair of overlapping cameras. returns left/right images
@@ -573,6 +584,102 @@ void renderStereoPanoramaChunksThread(
   *chunkR = lazyNovelChunksLR.second;
 }
 
+void st_generateRingOfNovelViewsAndRenderStereoSpherical (
+    const float cameraRingRadius,
+    const float camFovHorizontalDegrees,
+    vector<Mat>& projectionImages,  // I/P
+    Mat& panoImageL,   // O/P
+    Mat& panoImageR,   // O/P
+    double& opticalFlowRuntime,
+    double& novelViewRuntime) {
+
+  const int numCams = projectionImages.size();
+
+  // this is the amount of horizontal overlap the cameras would have if they
+  // were all perfectly aligned (in fact due to misalignment they overlap by a
+  // different amount for each pair, but we ignore that to make it simple)
+  const float fovHorizontalRadians = toRadians(camFovHorizontalDegrees);
+  const float overlapAngleDegrees =
+    (camFovHorizontalDegrees * float(numCams) - 360.0) / float(numCams);
+  const int camImageWidth = projectionImages[0].cols;
+  const int camImageHeight = projectionImages[0].rows;
+  const int overlapImageWidth =
+    float(camImageWidth) * (overlapAngleDegrees / camFovHorizontalDegrees);
+  const int numNovelViews = camImageWidth - overlapImageWidth; // per image pair
+
+  // setup parallel optical flow
+  double startOpticalFlowTime = getCurrTimeSec();
+  vector<NovelViewGenerator*> novelViewGenerators(projectionImages.size());
+
+  // time_checkpoint("");
+  for (int leftIdx=0; leftIdx < projectionImages.size(); ++leftIdx) {
+    const int rightIdx = (leftIdx+1) % projectionImages.size();
+    novelViewGenerators[leftIdx] =
+      new NovelViewGeneratorAsymmetricFlow(FLAGS_side_flow_alg);
+    prepareNovelViewGeneratorThread(
+      overlapImageWidth,
+      leftIdx,
+      &projectionImages[leftIdx],
+      &projectionImages[rightIdx],
+      novelViewGenerators[leftIdx]);
+  }
+  // time_checkpoint("first");
+
+  opticalFlowRuntime = getCurrTimeSec() - startOpticalFlowTime;
+
+  // lightfield/parallax formulas
+  const float v =
+    atanf(FLAGS_zero_parallax_dist / (FLAGS_interpupilary_dist / 2.0f));
+  const float psi =
+    asinf(sinf(v) * (FLAGS_interpupilary_dist / 2.0f) / cameraRingRadius);
+  const float vergeAtInfinitySlabDisplacement =
+    psi * (float(camImageWidth) / fovHorizontalRadians);
+  const float theta = -M_PI / 2.0f + v + psi;
+  const float zeroParallaxNovelViewShiftPixels =
+    float(FLAGS_eqr_width) * (theta / (2.0f * M_PI));
+  // time_checkpoint("second");
+  // ~4.9/23 seconds
+
+  double startNovelViewTime = getCurrTimeSec();
+  // a "chunk" will be just the part of the panorama formed from one pair of
+  // adjacent cameras. we will stack them horizontally to build the full
+  // panorama. we do this so it can be parallelized.
+  vector<Mat> panoChunksL(projectionImages.size(), Mat());
+  vector<Mat> panoChunksR(projectionImages.size(), Mat());
+  for (int leftIdx = 0; leftIdx < projectionImages.size(); ++leftIdx) {
+    renderStereoPanoramaChunksThread(
+      leftIdx,
+      numCams,
+      camImageWidth,
+      camImageHeight,
+      numNovelViews,
+      fovHorizontalRadians,
+      vergeAtInfinitySlabDisplacement,
+      novelViewGenerators[leftIdx],
+      &panoChunksL[leftIdx],
+      &panoChunksR[leftIdx]
+    );
+  }
+  // time_checkpoint("third");
+
+  novelViewRuntime = getCurrTimeSec() - startNovelViewTime;
+
+  // time_checkpoint("fourth");
+  for (int leftIdx = 0; leftIdx < projectionImages.size(); ++leftIdx) {
+    delete novelViewGenerators[leftIdx];
+  }
+  // time_checkpoint("fifth");
+
+  panoImageL = stackHorizontal(panoChunksL);
+  panoImageR = stackHorizontal(panoChunksR);
+
+  panoImageL = offsetHorizontalWrap(panoImageL, zeroParallaxNovelViewShiftPixels);
+  panoImageR = offsetHorizontalWrap(panoImageR, -zeroParallaxNovelViewShiftPixels);
+  // time_checkpoint("sixth");
+  
+}
+
+
 // generates a left/right eye equirect panorama using slices of novel views
 void generateRingOfNovelViewsAndRenderStereoSpherical(
     const float cameraRingRadius,
@@ -601,6 +708,9 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
   double startOpticalFlowTime = getCurrTimeSec();
   vector<NovelViewGenerator*> novelViewGenerators(projectionImages.size());
   vector<std::thread> threads;
+
+  // time_checkpoint("");
+  // ~14.8/23 seconds
   for (int leftIdx = 0; leftIdx < projectionImages.size(); ++leftIdx) {
     const int rightIdx = (leftIdx + 1) % projectionImages.size();
     novelViewGenerators[leftIdx] =
@@ -615,6 +725,7 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
     ));
   }
   for (std::thread& t : threads) { t.join(); }
+  // time_checkpoint("first");
 
   opticalFlowRuntime = getCurrTimeSec() - startOpticalFlowTime;
 
@@ -628,6 +739,8 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
   const float theta = -M_PI / 2.0f + v + psi;
   const float zeroParallaxNovelViewShiftPixels =
     float(FLAGS_eqr_width) * (theta / (2.0f * M_PI));
+  // time_checkpoint("second");
+  // ~4.9/23 seconds
 
   double startNovelViewTime = getCurrTimeSec();
   // a "chunk" will be just the part of the panorama formed from one pair of
@@ -652,18 +765,23 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
     ));
   }
   for (std::thread& t : panoThreads) { t.join(); }
+  // time_checkpoint("third");
 
   novelViewRuntime = getCurrTimeSec() - startNovelViewTime;
 
+  // time_checkpoint("fourth");
   for (int leftIdx = 0; leftIdx < projectionImages.size(); ++leftIdx) {
     delete novelViewGenerators[leftIdx];
   }
+  // time_checkpoint("fifth");
 
   panoImageL = stackHorizontal(panoChunksL);
   panoImageR = stackHorizontal(panoChunksR);
 
   panoImageL = offsetHorizontalWrap(panoImageL, zeroParallaxNovelViewShiftPixels);
   panoImageR = offsetHorizontalWrap(panoImageR, -zeroParallaxNovelViewShiftPixels);
+  // time_checkpoint("sixth");
+  
 }
 
 // handles flow between the fisheye top or bottom with the left/right eye side panoramas
@@ -1062,6 +1180,9 @@ void renderStereoPanorama() {
   double opticalFlowRuntime, novelViewRuntime;
   Mat sphericalImageL, sphericalImageR;
   LOG(INFO) << "Rendering stereo panorama";
+  // time_checkpoint("");
+  // ~20/36 seconds hotspot
+
   const double fovHorizontal = rig.isNewFormat()
     ? 2 * approximateFov(rig.rigSideOnly, false) * (180 / M_PI)
     : rig.camModelArray[0].fovHorizontal;
@@ -1073,6 +1194,37 @@ void renderStereoPanorama() {
     sphericalImageR,
     opticalFlowRuntime,
     novelViewRuntime);
+  // time_checkpoint("first");
+
+  double st_opticalFlowRuntime, st_novelViewRuntime;
+  Mat st_sphericalImageL, st_sphericalImageR;
+  st_generateRingOfNovelViewsAndRenderStereoSpherical(
+    rig.getRingRadius(),
+    fovHorizontal,
+    projectionImages,
+    st_sphericalImageL,
+    st_sphericalImageR,
+    st_opticalFlowRuntime,
+    st_novelViewRuntime);
+
+  // Checking correctness
+  Mat st_sphericalImageL_cn1, st_sphericalImageR_cn1;
+  Mat sphericalImageL_cn1, sphericalImageR_cn1;
+  Mat diff1, diff2;
+  cvtColor(sphericalImageL, sphericalImageL_cn1, CV_RGB2GRAY);
+  cvtColor(sphericalImageR, sphericalImageR_cn1, CV_RGB2GRAY);
+  cvtColor(st_sphericalImageL, st_sphericalImageL_cn1, CV_RGB2GRAY);
+  cvtColor(st_sphericalImageR, st_sphericalImageR_cn1, CV_RGB2GRAY);
+  cv::bitwise_xor(sphericalImageL_cn1, st_sphericalImageL_cn1, diff1);
+  cv::bitwise_xor(sphericalImageR_cn1, st_sphericalImageR_cn1, diff2);
+  bool eq1 = (cv::countNonZero(diff1) == 0);
+  bool eq2 = (cv::countNonZero(diff2) == 0);
+
+  if (eq1 && eq2) {
+    std::cout << "Correctness passed" << std::endl; 
+    std::cout << "ST time: Optical Flow: " << st_opticalFlowRuntime << std::endl;
+    std::cout << "ST time: Novel View: " << st_novelViewRuntime << std::endl;
+  }
 
   if (FLAGS_save_debug_images) {
     VLOG(1) << "Offset-warping images for debugging";
@@ -1197,6 +1349,8 @@ void renderStereoPanorama() {
     imwriteExceptionOnFail(FLAGS_output_data_dir + "/eqr_sideL.png", sphericalImageL);
     imwriteExceptionOnFail(FLAGS_output_data_dir + "/eqr_sideR.png", sphericalImageR);
   }
+  // time_checkpoint("second");
+  // ~4.7/36 seconds hotspot
 
   const double startSharpenTime = getCurrTimeSec();
   if (FLAGS_sharpenning > 0.0f) {
@@ -1211,6 +1365,7 @@ void renderStereoPanorama() {
     }
   }
   const double endSharpenTime = getCurrTimeSec();
+  // time_checkpoint("third");
 
   // project the horizontal panoramas to cubemaps and composite the top
   const double startCubemapTime = getCurrTimeSec();
@@ -1234,6 +1389,7 @@ void renderStereoPanorama() {
     imwriteExceptionOnFail(FLAGS_output_cubemap_path, stereoCubemap);
   }
   const double endCubemapTime = getCurrTimeSec();
+  // time_checkpoint("fourth");
 
   if (FLAGS_final_eqr_width != 0 &&
       FLAGS_final_eqr_height != 0 &&
@@ -1255,6 +1411,7 @@ void renderStereoPanorama() {
       0,
       INTER_CUBIC);
   }
+  // time_checkpoint("fifth");
 
   LOG(INFO) << "Creating stereo equirectangular image";
   Mat stereoEquirect = stackVertical(vector<Mat>({sphericalImageL, sphericalImageR}));

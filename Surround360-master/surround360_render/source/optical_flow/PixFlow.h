@@ -21,6 +21,10 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
+// NOTE: BY SCHANDA
+// #include "checkpoint.h"
+#include "SystemUtil.h"
+
 namespace surround360 {
 namespace optical_flow {
 
@@ -88,6 +92,7 @@ struct PixFlow : public OpticalFlowInterface {
       DirectionHint hint) {
 
     assert(prevFlow.dims == 0 || prevFlow.size() == rgba0byte.size());
+    //time_checkpoint("");
 
     // pre-scale everything to a smaller size. this should be faster + more stable
     Mat rgba0byteDownscaled, rgba1byteDownscaled, prevFlowDownscaled;
@@ -116,6 +121,7 @@ struct PixFlow : public OpticalFlowInterface {
         }
       }
     }
+    //time_checkpoint("first");
 
     // convert to various color spaces
     Mat I0Grey, I1Grey, I0, I1, alpha0, alpha1;
@@ -136,6 +142,7 @@ struct PixFlow : public OpticalFlowInterface {
 
     GaussianBlur(I0, I0, Size(kPreBlurKernelWidth, kPreBlurKernelWidth), kPreBlurSigma);
     GaussianBlur(I1, I1, Size(kPreBlurKernelWidth, kPreBlurKernelWidth), kPreBlurSigma);
+    //time_checkpoint("second");
 
     vector<Mat> pyramidI0       = buildPyramid(I0);
     vector<Mat> pyramidI1       = buildPyramid(I1);
@@ -153,6 +160,7 @@ struct PixFlow : public OpticalFlowInterface {
     }
     flow = Mat();
 
+    // std::cout << "size: " << pyramidI0.size() << std::endl;
     for (int level = pyramidI0.size() - 1; level >= 0; --level) {
       patchMatchPropagationAndSearch(
         pyramidI0[level],
@@ -180,6 +188,7 @@ struct PixFlow : public OpticalFlowInterface {
       flow,
       Size(kFinalFlowBlurKernelWidth, kFinalFlowBlurKernelWidth),
       kFinalFlowBlurSigma);
+  // time_checkpoint("third");
   }
 
   void adjustFlowTowardPrevious(const Mat& prevFlow, const Mat& motion, Mat& flow) {
@@ -349,6 +358,8 @@ struct PixFlow : public OpticalFlowInterface {
       Mat& flow,
       DirectionHint hint) {
 
+    // double start=0, end=0;
+    // std::thread::id this_id = std::this_thread::get_id();
     // image gradients
     Mat I0x, I0y, I1x, I1y;
     const int kSameDepth = -1; // same depth as source image
@@ -384,6 +395,7 @@ struct PixFlow : public OpticalFlowInterface {
 
     const cv::Size imgSize = I0.size();
 
+    // ******* PRIMARY HOTSPOT ********
     // sweep from top/left
     for (int y = 0; y < imgSize.height; ++y) {
       for (int x = 0; x < imgSize.width; ++x) {
@@ -395,8 +407,11 @@ struct PixFlow : public OpticalFlowInterface {
         }
       }
     }
+    // ******* PRIMARY HOTSPOT ********
+    // start = surround360::util::getCurrTimeSec();
     medianBlur(flow, flow, kMedianBlurSize);
 
+    // ******* PRIMARY HOTSPOT ********
     // sweep from bottom/right
     for (int y = imgSize.height - 1; y >= 0; --y) {
       for (int x = imgSize.width - 1; x >= 0; --x) {
@@ -408,8 +423,11 @@ struct PixFlow : public OpticalFlowInterface {
         }
       }
     }
+    // ******* PRIMARY HOTSPOT ********
     medianBlur(flow, flow, kMedianBlurSize);
     lowAlphaFlowDiffusion(alpha0, alpha1, flow);
+    // end = surround360::util::getCurrTimeSec();
+    // std::cout << "[" << this_id << "] Time taken: " << (end-start) << std::endl;
   }
 
   inline void proposeFlowUpdate(

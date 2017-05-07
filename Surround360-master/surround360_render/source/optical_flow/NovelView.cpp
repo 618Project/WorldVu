@@ -18,6 +18,9 @@
 #include "OpticalFlowInterface.h"
 #include "SystemUtil.h"
 
+// NOTE: BY SCHANDA
+// #include "checkpoint.h"
+
 namespace surround360 {
 namespace optical_flow {
 
@@ -299,6 +302,8 @@ void NovelViewGeneratorAsymmetricFlow::prepare(
 
   imageL = colorImageL.clone();
   imageR = colorImageR.clone();
+  // time_checkpoint("");
+  // Both first and second take half time each. around 4.4 seconds hotspot
 
   OpticalFlowInterface* flowAlg = makeOpticalFlowByName(flowAlgName);
   flowAlg->computeOpticalFlow(
@@ -309,6 +314,7 @@ void NovelViewGeneratorAsymmetricFlow::prepare(
     prevColorImageR,
     flowLtoR,
     OpticalFlowInterface::DirectionHint::LEFT);
+  // time_checkpoint("first");
   flowAlg->computeOpticalFlow(
     imageR,
     imageL,
@@ -317,6 +323,7 @@ void NovelViewGeneratorAsymmetricFlow::prepare(
     prevColorImageL,
     flowRtoL,
     OpticalFlowInterface::DirectionHint::RIGHT);
+  // time_checkpoint("second");
   delete flowAlg;
 }
 
