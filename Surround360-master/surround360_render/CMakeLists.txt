@@ -170,9 +170,11 @@ ENDIF()
 
 ### TestRenderStereoPanorama ###
 
-ADD_EXECUTABLE(
+find_package(CUDA)
+CUDA_ADD_EXECUTABLE(
   TestRenderStereoPanorama
   source/test/TestRenderStereoPanorama.cpp
+  OPTIONS --gpu-architecture compute_35
 )
 TARGET_COMPILE_FEATURES(TestRenderStereoPanorama PRIVATE cxx_range_for)
 TARGET_LINK_LIBRARIES(
