@@ -6,6 +6,8 @@ FIND_PACKAGE(OpenCV)
 FIND_PACKAGE(Ceres REQUIRED)
 FIND_PACKAGE(Boost COMPONENTS filesystem system)
 
+INCLUDE(FindCUDA)
+find_package(CUDA)
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/source)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/source/util)
@@ -15,6 +17,8 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/source/calibration)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/source/render)
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 INCLUDE_DIRECTORIES(/usr/local/include/eigen3)
+INCLUDE_DIRECTORIES(/usr/local/cuda/include)
+LINK_DIRECTORIES(${CUDA_LIBRARY_DIRS})
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # required for clang, including AppleClang
@@ -46,6 +50,13 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_OSX_ARCHITECTURES "${ARCHS_STANDARD}")
+
+#LIST(APPEND CUDA_NVCC_FLAGS "-arch=sm_20;-std=c++11;-O2;-DVERBOSE")
+# LIST(APPEND CUDA_NVCC_FLAGS "-DVERBOSE")
+# LIST(APPEND CUDA_NVCC_FLAGS )
+#LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
+#LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
+#LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
 ### Add custom targets to show all source and header files in Xcode ###
 
@@ -99,6 +110,7 @@ ADD_LIBRARY(
   ${render_SRC}
   ${util_SRC}
 )
+
 TARGET_COMPILE_FEATURES(LibVrCamera PRIVATE cxx_range_for)
 
 ### Raw2Rgb ###
@@ -170,11 +182,10 @@ ENDIF()
 
 ### TestRenderStereoPanorama ###
 
-find_package(CUDA)
 CUDA_ADD_EXECUTABLE(
   TestRenderStereoPanorama
   source/test/TestRenderStereoPanorama.cpp
-  OPTIONS --gpu-architecture compute_35
+  test.cu
 )
 TARGET_COMPILE_FEATURES(TestRenderStereoPanorama PRIVATE cxx_range_for)
 TARGET_LINK_LIBRARIES(
