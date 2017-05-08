@@ -191,7 +191,6 @@ ENDIF()
 CUDA_ADD_EXECUTABLE(
   TestRenderStereoPanorama
   source/test/TestRenderStereoPanorama.cpp
-  test.cu
 )
 TARGET_COMPILE_FEATURES(TestRenderStereoPanorama PRIVATE cxx_range_for)
 TARGET_LINK_LIBRARIES(

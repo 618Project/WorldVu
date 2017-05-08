@@ -173,7 +173,7 @@ struct PixFlow : public OpticalFlowInterface {
           flow,
           hint);
       } else if (mode == GPU_MODE) {
-        patchMatchPropagationAndSearch(
+        GPU_patchMatchPropagationAndSearch(
           pyramidI0[level],
           pyramidI1[level],
           pyramidAlpha0[level],
@@ -360,6 +360,86 @@ struct PixFlow : public OpticalFlowInterface {
         }
       }
     }
+  }
+
+  void GPU_patchMatchPropagationAndSearch(
+      const Mat& I0,
+      const Mat& I1,
+      const Mat& alpha0,
+      const Mat& alpha1,
+      Mat& flow,
+      DirectionHint hint) {
+
+    // double start=0, end=0;
+    // std::thread::id this_id = std::this_thread::get_id();
+    // image gradients
+    Mat I0x, I0y, I1x, I1y;
+    const int kSameDepth = -1; // same depth as source image
+    const int kKernelSize = 1;
+    Sobel(I0, I0x, kSameDepth, 1, 0, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+    Sobel(I0, I0y, kSameDepth, 0, 1, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+    Sobel(I1, I1x, kSameDepth, 1, 0, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+    Sobel(I1, I1y, kSameDepth, 0, 1, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+
+    // blur gradients
+    const cv::Size kGradientBlurSize(kGradientBlurKernelWidth, kGradientBlurKernelWidth);
+    GaussianBlur(I0x, I0x, kGradientBlurSize, kGradientBlurSigma);
+    GaussianBlur(I0y, I0y, kGradientBlurSize, kGradientBlurSigma);
+    GaussianBlur(I1x, I1x, kGradientBlurSize, kGradientBlurSigma);
+    GaussianBlur(I1y, I1y, kGradientBlurSize, kGradientBlurSigma);
+
+    if (flow.empty()) {
+      // initialize to all zeros
+      flow = Mat::zeros(I0.size(), CV_32FC2);
+      // optionally look for a better flow
+      if (MaxPercentage > 0 && hint != DirectionHint::UNKNOWN) {
+        adjustInitialFlow(I0, I1, alpha0, alpha1, flow, hint);
+      }
+    }
+
+    // blur flow. we will regularize against this
+    Mat blurredFlow;
+    GaussianBlur(
+      flow,
+      blurredFlow,
+      cv::Size(kBlurredFlowKernelWidth, kBlurredFlowKernelWidth),
+      kBlurredFlowSigma);
+
+    const cv::Size imgSize = I0.size();
+
+    // ******* PRIMARY HOTSPOT ********
+    // sweep from top/left
+    for (int y = 0; y < imgSize.height; ++y) {
+      for (int x = 0; x < imgSize.width; ++x) {
+        if (alpha0.at<float>(y, x) > kUpdateAlphaThreshold && alpha1.at<float>(y, x) > kUpdateAlphaThreshold) {
+          float currErr = errorFunction(I0, I1, alpha0, alpha1, I0x, I0y, I1x, I1y, x, y, flow, blurredFlow, flow.at<Point2f>(y, x));
+          if (x > 0) { proposeFlowUpdate(alpha0, alpha1, I0, I1, I0x, I0y, I1x, I1y, flow, blurredFlow, currErr, x, y, flow.at<Point2f>(y, x - 1)); }
+          if (y > 0) { proposeFlowUpdate(alpha0, alpha1, I0, I1, I0x, I0y, I1x, I1y, flow, blurredFlow, currErr, x, y, flow.at<Point2f>(y - 1, x)); }
+          flow.at<Point2f>(y, x) -= gradientStepSize * errorGradient(I0, I1, alpha0, alpha1, I0x, I0y, I1x, I1y, x, y, flow, blurredFlow, currErr);
+        }
+      }
+    }
+    // ******* PRIMARY HOTSPOT ********
+    // start = surround360::util::getCurrTimeSec();
+    medianBlur(flow, flow, kMedianBlurSize);
+
+    // ******* PRIMARY HOTSPOT ********
+    // sweep from bottom/right
+    for (int y = imgSize.height - 1; y >= 0; --y) {
+      for (int x = imgSize.width - 1; x >= 0; --x) {
+        if (alpha0.at<float>(y, x) > kUpdateAlphaThreshold && alpha1.at<float>(y, x) > kUpdateAlphaThreshold) {
+          float currErr = errorFunction(I0, I1, alpha0, alpha1, I0x, I0y, I1x, I1y, x, y, flow, blurredFlow, flow.at<Point2f>(y, x));
+          if (x < imgSize.width - 1)  { proposeFlowUpdate(alpha0, alpha1, I0, I1, I0x, I0y, I1x, I1y, flow, blurredFlow, currErr, x, y, flow.at<Point2f>(y, x + 1)); }
+          if (y < imgSize.height - 1) { proposeFlowUpdate(alpha0, alpha1, I0, I1, I0x, I0y, I1x, I1y, flow, blurredFlow, currErr, x, y, flow.at<Point2f>(y + 1, x)); }
+          flow.at<Point2f>(y, x) -= gradientStepSize * errorGradient(I0, I1, alpha0, alpha1, I0x, I0y, I1x, I1y, x, y, flow, blurredFlow, currErr);
+        }
+      }
+    }
+    // ******* PRIMARY HOTSPOT ********
+    medianBlur(flow, flow, kMedianBlurSize);
+    lowAlphaFlowDiffusion(alpha0, alpha1, flow);
+    // end = surround360::util::getCurrTimeSec();
+    // std::cout << "[" << this_id << "] Time taken: " << (end-start) << std::endl;
   }
 
   void patchMatchPropagationAndSearch(
