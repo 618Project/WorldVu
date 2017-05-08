@@ -102,9 +102,15 @@ FILE(GLOB optical_flow_SRC "source/optical_flow/*.cpp")
 FILE(GLOB render_SRC "source/render/*.cpp")
 FILE(GLOB util_SRC "source/util/*.cpp")
 
+CUDA_COMPILE (
+  CU_O
+  source/optical_flow/PixelKernels.cu
+)
+
 ADD_LIBRARY(
   LibVrCamera
   source/util/SystemUtil.cpp
+  ${CU_O}
   ${calibration_SRC}
   ${optical_flow_SRC}
   ${render_SRC}

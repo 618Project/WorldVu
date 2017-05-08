@@ -27,6 +27,8 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
+#include "defines.h"
+
 using namespace std;
 using namespace cv;
 using namespace surround360;
@@ -76,7 +78,7 @@ void testDisparity(const string imagePathL, const string imagePathR) {
 
     LOG(INFO) << "calling prepare";
     double prepareStartTime = getCurrTimeSec();
-    novelViewGen->prepare(colorImageL, colorImageR);
+    novelViewGen->prepare(colorImageL, colorImageR, CPU_MODE);
     double prepareEndTime = getCurrTimeSec();
     LOG(INFO) << "RUNTIME (sec) = " << (prepareEndTime - prepareStartTime);
 
@@ -199,7 +201,7 @@ void middleburyInterpolationExperiment() {
     NovelViewGenerator* novelViewGen =
       new NovelViewGeneratorAsymmetricFlow(FLAGS_flow_alg);
 
-    novelViewGen->prepare(inputImage0, inputImage1);
+    novelViewGen->prepare(inputImage0, inputImage1, CPU_MODE);
 
       Mat novelViewMerged, novelViewFromL, novelViewFromR;
       const float kShift = 0.5f;

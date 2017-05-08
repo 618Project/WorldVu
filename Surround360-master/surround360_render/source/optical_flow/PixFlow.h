@@ -23,7 +23,8 @@
 
 // NOTE: BY SCHANDA
 // #include "checkpoint.h"
-#include "SystemUtil.h"
+#include "PixelKernels.h"
+#include "defines.h"
 
 namespace surround360 {
 namespace optical_flow {
@@ -89,7 +90,8 @@ struct PixFlow : public OpticalFlowInterface {
       const Mat& prevI0BGRA,
       const Mat& prevI1BGRA,
       Mat& flow,
-      DirectionHint hint) {
+      DirectionHint hint,
+      int mode) {
 
     assert(prevFlow.dims == 0 || prevFlow.size() == rgba0byte.size());
     //time_checkpoint("");
@@ -162,13 +164,23 @@ struct PixFlow : public OpticalFlowInterface {
 
     // std::cout << "size: " << pyramidI0.size() << std::endl;
     for (int level = pyramidI0.size() - 1; level >= 0; --level) {
-      patchMatchPropagationAndSearch(
-        pyramidI0[level],
-        pyramidI1[level],
-        pyramidAlpha0[level],
-        pyramidAlpha1[level],
-        flow,
-        hint);
+      if (mode == CPU_MODE) {
+        patchMatchPropagationAndSearch(
+          pyramidI0[level],
+          pyramidI1[level],
+          pyramidAlpha0[level],
+          pyramidAlpha1[level],
+          flow,
+          hint);
+      } else if (mode == GPU_MODE) {
+        patchMatchPropagationAndSearch(
+          pyramidI0[level],
+          pyramidI1[level],
+          pyramidAlpha0[level],
+          pyramidAlpha1[level],
+          flow,
+          hint);
+      }
 
       if (usePrevFlowTemporalRegularization) {
         adjustFlowTowardPrevious(prevFlowPyramid[level], motionPyramid[level], flow);

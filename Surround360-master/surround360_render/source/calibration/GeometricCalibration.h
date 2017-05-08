@@ -1,3 +1,6 @@
+#ifndef __GEOMETRIC_CALIBRATION_H__
+#define __GEOMETRIC_CALIBRATION_H__
+
 #include "Camera.h"
 
 using namespace surround360;
@@ -216,3 +219,5 @@ void removeOutliers(ceres::Problem& problem, double threshold) {
     }
   }
 }
+
+#endif

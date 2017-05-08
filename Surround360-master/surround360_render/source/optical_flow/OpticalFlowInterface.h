@@ -38,8 +38,11 @@ public:
     const Mat& prevI0BGRA,
     const Mat& prevI1BGRA,
     Mat& flow,
-    DirectionHint hint) = 0;
+    DirectionHint hint,
+    int mode) = 0;
+  
 };
+
 
 } // namespace optical_flow
 } // namespace surround360

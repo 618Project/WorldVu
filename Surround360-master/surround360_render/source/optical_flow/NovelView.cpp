@@ -298,7 +298,8 @@ void NovelViewGeneratorAsymmetricFlow::prepare(
     const Mat& prevFlowLtoR,
     const Mat& prevFlowRtoL,
     const Mat& prevColorImageL,
-    const Mat& prevColorImageR) {
+    const Mat& prevColorImageR,
+    int mode) {
 
   imageL = colorImageL.clone();
   imageR = colorImageR.clone();
@@ -313,7 +314,8 @@ void NovelViewGeneratorAsymmetricFlow::prepare(
     prevColorImageL,
     prevColorImageR,
     flowLtoR,
-    OpticalFlowInterface::DirectionHint::LEFT);
+    OpticalFlowInterface::DirectionHint::LEFT,
+    mode);
   // time_checkpoint("first");
   flowAlg->computeOpticalFlow(
     imageR,
@@ -322,7 +324,8 @@ void NovelViewGeneratorAsymmetricFlow::prepare(
     prevColorImageR,
     prevColorImageL,
     flowRtoL,
-    OpticalFlowInterface::DirectionHint::RIGHT);
+    OpticalFlowInterface::DirectionHint::RIGHT,
+    mode);
   // time_checkpoint("second");
   delete flowAlg;
 }

@@ -91,11 +91,12 @@ public:
     const Mat& prevFlowLtoR,
     const Mat& prevFlowRtoL,
     const Mat& prevColorImageL,
-    const Mat& prevColorImageR) = 0;
+    const Mat& prevColorImageR,
+    int mode) = 0;
 
   // simplified version of prepare which doesn't require previous frame data,
   // to be used when we don't care about temporal regularization.
-  void prepare(const Mat& colorImageL, const Mat& colorImageR) {
+  void prepare(const Mat& colorImageL, const Mat& colorImageR, int mode) {
     Mat prevFlowLtoR, prevFlowRtoL, prevColorImageL, prevColorImageR;
     prepare(
       colorImageL,
@@ -103,7 +104,8 @@ public:
       prevFlowLtoR,
       prevFlowRtoL,
       prevColorImageL,
-      prevColorImageR);
+      prevColorImageR,
+      mode);
   }
   // generate a novel that synthesizes a camera between colorImageL and colorImageR.
   // when shiftFromL = 0, this will be ~equal to the original colorImageL, and when
@@ -193,7 +195,8 @@ public:
     const Mat& prevFlowLtoR,
     const Mat& prevFlowRtoL,
     const Mat& prevColorImageL,
-    const Mat& prevColorImageR);
+    const Mat& prevColorImageR,
+    int mode);
 };
 
 } // namespace reprojection

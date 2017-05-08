@@ -39,6 +39,7 @@
 
 // NOTE: BY SCHANDA
 // #include "checkpoint.h"
+#include "defines.h"
 
 using namespace cv;
 using namespace std;
@@ -85,6 +86,12 @@ DEFINE_bool(new_rig_format,               false,          "use new rig and camer
 
 const Camera::Vector3 kGlobalUp = Camera::Vector3::UnitZ();
 
+  // __global__ void temporary () {
+  //   int a;
+  //   a = 3*4;
+  //   printf ("a: %d\n", a);
+  // }
+  
 // represents either new or old rig format depending on FLAGS_new_rig_format
 struct RigDescription {
   // new format fields
@@ -488,7 +495,8 @@ void prepareNovelViewGeneratorThread(
     const int leftIdx, // only used to determine debug image filename
     Mat* imageL,
     Mat* imageR,
-    NovelViewGenerator* novelViewGen) {
+    NovelViewGenerator* novelViewGen,
+    int mode) {
 
   // time_checkpoint ("");
   Mat overlapImageL = (*imageL)(Rect(
@@ -531,7 +539,8 @@ void prepareNovelViewGeneratorThread(
     prevFrameFlowLtoR,
     prevFrameFlowRtoL,
     prevOverlapImageL,
-    prevOverlapImageR);
+    prevOverlapImageR,
+    mode);
   // time_checkpoint("third");
 
   // get the results of flow and save them. we will need these for temporal regularization
@@ -593,6 +602,7 @@ void st_generateRingOfNovelViewsAndRenderStereoSpherical (
     double& opticalFlowRuntime,
     double& novelViewRuntime) {
 
+  int mode = GPU_MODE;
   const int numCams = projectionImages.size();
 
   // this is the amount of horizontal overlap the cameras would have if they
@@ -621,7 +631,8 @@ void st_generateRingOfNovelViewsAndRenderStereoSpherical (
       leftIdx,
       &projectionImages[leftIdx],
       &projectionImages[rightIdx],
-      novelViewGenerators[leftIdx]);
+      novelViewGenerators[leftIdx],
+      mode);  // In which mode to run
   }
   // time_checkpoint("first");
 
@@ -690,6 +701,7 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
     double& opticalFlowRuntime,
     double& novelViewRuntime) {
 
+  int mode = CPU_MODE;
   const int numCams = projectionImages.size();
 
   // this is the amount of horizontal overlap the cameras would have if they
@@ -721,7 +733,8 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
       leftIdx,
       &projectionImages[leftIdx],
       &projectionImages[rightIdx],
-      novelViewGenerators[leftIdx]
+      novelViewGenerators[leftIdx],
+      mode
     ));
   }
   for (std::thread& t : threads) { t.join(); }
@@ -834,7 +847,8 @@ void poleToSideFlowThread(
     prevExtendedSideSpherical,
     prevExtendedFisheyeSpherical,
     flow,
-    OpticalFlowInterface::DirectionHint::DOWN);
+    OpticalFlowInterface::DirectionHint::DOWN,
+    CPU_MODE);
   delete flowAlg;
 
   VLOG(1) << "Serializing fisheye flow result";

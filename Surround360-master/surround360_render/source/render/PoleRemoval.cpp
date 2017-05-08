@@ -108,7 +108,9 @@ void combineBottomImagesWithPoleRemoval(
     prevBottomImage,
     prevBottomImage2,
     flow,
-    OpticalFlowInterface::DirectionHint::DOWN);
+    OpticalFlowInterface::DirectionHint::DOWN,
+    CPU_MODE
+  );
   delete flowAlg;
 
   if (saveFlowDataForNextFrame) {
