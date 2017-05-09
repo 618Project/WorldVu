@@ -1209,6 +1209,9 @@ void renderStereoPanorama() {
     opticalFlowRuntime,
     novelViewRuntime);
   // time_checkpoint("first");
+  LOG(INFO) << "Finished Multithreaded Run" ;
+  LOG(INFO) << "MT time: Optical Flow: " << opticalFlowRuntime ;
+  LOG(INFO) << "MT time: Novel View: " << novelViewRuntime ;
 
   double st_opticalFlowRuntime, st_novelViewRuntime;
   Mat st_sphericalImageL, st_sphericalImageR;
@@ -1235,9 +1238,16 @@ void renderStereoPanorama() {
   bool eq2 = (cv::countNonZero(diff2) == 0);
 
   if (eq1 && eq2) {
-    std::cout << "Correctness passed" << std::endl; 
-    std::cout << "ST time: Optical Flow: " << st_opticalFlowRuntime << std::endl;
-    std::cout << "ST time: Novel View: " << st_novelViewRuntime << std::endl;
+    LOG(INFO) << "Finished SingleThreaded Run" ;
+    LOG(INFO) << "Correctness passed" ; 
+    LOG(INFO) << "ST time: Optical Flow: " << st_opticalFlowRuntime ;
+    LOG(INFO) << "ST time: Novel View: " << st_novelViewRuntime ;
+  } 
+  else {
+    float resolution = 7680.0*4320.0;  // Applies only for 8K resolution, need to hardcode for 6K resolution if required.
+    LOG(INFO) << "Correctness Failed in MT vs ST" ; 
+    LOG(INFO) << "Image1L and Image2L differ in " << diff1*100.0/resolution << " pixels " ;
+    LOG(INFO) << "Image1R and Image2R differ in " << diff2*100.0/resolution << " pixels " ;
   }
 
   if (FLAGS_save_debug_images) {
