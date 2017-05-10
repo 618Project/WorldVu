@@ -61,7 +61,7 @@ We see mainly 6 different stages in the computation of the Facebook Stereo Rende
 6. Equirectangular to Cubemap transformation.
 
 As part of this project, we have accelerated the 2 primary hotspots, Side optical flow and Sharpening and the results are 
-as follows. All our results have been run on AWS machine (g2.2xlarge: CPU - 8 core Intel Xeon E5-2670 (Sandy Bridge) Processors and GPU - High-performance NVIDIA GPUs, each with 1,536 CUDA cores and 4GB video memory). Results are for a run where CPU rendering of all phases included take 66.3 seconds. <br/>
+as follows. All our results have been run on AWS machine (g2.2xlarge: CPU - 8 core Intel Xeon E5-2670 (Sandy Bridge) Processors and GPU - NVIDIA GPU, with 1,536 CUDA cores and 4GB video memory). Results are for a run where CPU rendering of all phases included take 66.3 seconds. <br/>
 
 In the below table, accuracy is measured as the number of pixels that are having exact pixel intensities when compared to that of the original implementation. Also, speedup is the ratio by which our accelerated implementation is faster than that of the original implementation.
 <table>
