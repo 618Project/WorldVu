@@ -55,11 +55,10 @@ significantly lost image perception in spite of our speedup. We see minimal over
 <h3> Our Accelerated Rendering </h3> 
 ![Imgur](http://i.imgur.com/vK583d0.jpg)
 
-<h1>Comparison</h1>
+<h2>Comparison</h2>
 To provide a comparision of the speedup, 
 1. The original code takes **66 seconds per frame**, thus resulting in **1980 minutes for rendering 1 min of video at 30fps**.
 2. Our accelerated code, if we replace only the blocks that we have worked on ( optical flow + sharpening ) in the original code, the rendering time is **19 seconds per frame**, thus resulting in **573 minutes for rendering 1 min of video at 30 fps**. 
-
 
 <h2> Speedup Breakdown </h2> 
 We see mainly 6 different stages in the computation of the Facebook Stereo Rendering Panorama Pipeline.
