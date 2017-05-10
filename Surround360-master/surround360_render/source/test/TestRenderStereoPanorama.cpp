@@ -36,7 +36,7 @@
 #include <glog/logging.h>
 
 #include <ctime>
-
+#include "Sharpen.h"
 // NOTE: BY SCHANDA
 // #include "checkpoint.h"
 #include "defines.h"
@@ -593,7 +593,7 @@ void renderStereoPanoramaChunksThread(
   *chunkR = lazyNovelChunksLR.second;
 }
 
-void st_generateRingOfNovelViewsAndRenderStereoSpherical (
+void generateRingOfNovelViewsAndRenderStereoSpherical (
     const float cameraRingRadius,
     const float camFovHorizontalDegrees,
     vector<Mat>& projectionImages,  // I/P
@@ -692,7 +692,7 @@ void st_generateRingOfNovelViewsAndRenderStereoSpherical (
 
 
 // generates a left/right eye equirect panorama using slices of novel views
-void generateRingOfNovelViewsAndRenderStereoSpherical(
+void st_generateRingOfNovelViewsAndRenderStereoSpherical(
     const float cameraRingRadius,
     const float camFovHorizontalDegrees,
     vector<Mat>& projectionImages,
@@ -1115,13 +1115,49 @@ void prepareTopImagesThread(
 
 // sharpen the left or right eye panorama using a periodic boundary
 void sharpenThread(Mat* sphericalImage) {
+
   const WrapBoundary<float> wrapB;
   const ReflectBoundary<float> reflectB;
+  Mat sMat = *sphericalImage;
+
+  double startTimeCPU = surround360::util::getCurrTimeSec();
   Mat lowPassSphericalImage(sphericalImage->rows, sphericalImage->cols, CV_8UC3);
+  
   iirLowPass<WrapBoundary<float>, ReflectBoundary<float>, Vec3b>(
     *sphericalImage, 0.25f, lowPassSphericalImage, wrapB, reflectB);
+  
   sharpenWithIirLowPass<Vec3b>(
     *sphericalImage, lowPassSphericalImage, 1.0f + FLAGS_sharpenning);
+  
+  double endTimeCPU = surround360::util::getCurrTimeSec() - startTimeCPU; 
+  LOG(INFO) << "Time in Sharpening CPU is " <<  endTimeCPU ;
+
+  double startTimeGPU = surround360::util::getCurrTimeSec();
+  cvtColor(sMat, sMat, CV_BGR2BGRA);
+  Mat result;
+  result = sharpenGPU(sMat);
+  Mat color;
+  cvtColor(result, color , COLOR_BGRA2BGR, 3);
+
+
+  Mat Testspherical;
+  Mat diff;
+  cvtColor(*sphericalImage, Testspherical, CV_BGR2GRAY);
+  cvtColor( color, color, CV_BGR2GRAY);
+  bitwise_xor(color, Testspherical, diff);
+  bool eq = (cv::countNonZero(diff) == 0 );
+
+  if (eq) 
+     LOG(INFO) << "Sharpening Correctness Passed"; 
+  else
+    {
+     float resolution = 7680.0*4320.0;  // Applies only for 8K resolution, need to hardcode for 6K resolution if required.
+     LOG(INFO) << "Sharpening Correctness Failed "; 
+     LOG(INFO) << "Percentage Difference is " << cv::countNonZero(diff)*100/resolution; 
+    }
+  double endTimeGPU = surround360::util::getCurrTimeSec() - startTimeGPU; 
+  LOG(INFO) << "Time in Sharpening GPU is " <<  endTimeGPU ;
+
 }
 
 // If the un-padded height is odd and targetHeight is even, we can't do equal

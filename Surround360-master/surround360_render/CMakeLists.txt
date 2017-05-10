@@ -112,6 +112,7 @@ FILE(GLOB util_SRC "source/util/*.cpp")
 CUDA_COMPILE (
   CU_O
   source/optical_flow/PixelKernels.cu
+  source/test/Sharpen.cu
 )
 
 ADD_LIBRARY(
