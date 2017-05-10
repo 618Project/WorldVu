@@ -53,12 +53,12 @@ One other hotspot of performance is the final sharpening of the fully stitched i
 - Mention speedup
 <h2> Speedup Breakdown </h2> 
 We see mainly 6 different stages in the computation of the Facebook Stereo Rendering Panorama Pipeline.
-1) Spherical projection of the images for each camera.
-2) Side optical flow for stereo.
-3) Novel view panorama.
-4) Flow top+bottom with sides.
-5) Sharpening
-6) Equirectangular to Cubemap transformation.
+1. Spherical projection of the images for each camera.
+2. Side optical flow for stereo.
+3. Novel view panorama.
+4. Flow top+bottom with sides.
+5. Sharpening
+6. Equirectangular to Cubemap transformation.
 
 As part of this project, we have accelerated the 2 primary hotspots, Side optical flow and Sharpening and the results are 
 as follows.
