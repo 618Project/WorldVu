@@ -1,5 +1,5 @@
 <span>
-Team: Sampath Chanda (schanda) and Harish Dixit (hdixit)
+Team: Sampath Chanda (schanda) and Harish Dixit (hdixit) <br/>
 </span>
 Please refer to: <br/>
 <a href="https://618project.github.io/WorldVu/proposal" style="background:#D8D8D8;">Proposal</a>
