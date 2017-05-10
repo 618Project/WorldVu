@@ -48,7 +48,7 @@ One other hotspot of performance is the final sharpening of the fully stitched i
 <img src="https://drive.google.com/open?id=0B_ThtGsKhnxNX3JzcGpndXEzSlE" alt="Original Rendering">
 
 <h3> Our Accelerated Rendering </h3> 
-<img src="https://drive.google.com/a/andrew.cmu.edu/file/d/0B_ThtGsKhnxNbFdtMVNXdlVwSWc/view?usp=sharing" alt="Our Result">
+![Our Rendering]("https://drive.google.com/a/andrew.cmu.edu/file/d/0B_ThtGsKhnxNbFdtMVNXdlVwSWc/view?usp=sharing)
 
 - Mention speedup
 - Inaccuracies with performance rise
