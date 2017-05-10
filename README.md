@@ -45,10 +45,10 @@ One other hotspot of performance is the final sharpening of the fully stitched i
 <h1>Current Result</h1>
 <h2> Image Renderings </h2> 
 <h3> Facebook Rendering </h3> 
-![Facebook Rendering]("https://goo.gl/photos/LfmNcrk7AMWPTo9x9")
+![Facebook Rendering]("https://goo.gl/photos/FsWayWWXAsaV2x8q9")
 
 <h3> Our Accelerated Rendering </h3> 
-![Our Rendering]("https://goo.gl/photos/LfmNcrk7AMWPTo9x9")
+![Our Rendering]("https://goo.gl/photos/FsWayWWXAsaV2x8q9")
 
 - Mention speedup
 <h2> Speedup Breakdown </h2> 
