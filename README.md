@@ -43,6 +43,13 @@ While just exploiting pixel level parallelism of an frame pair, a modern GPU wou
 One other hotspot of performance is the final sharpening of the fully stitched images (for left and right eye). The current algorithm uses an iirLowPass filter that computes horizontal and vertical pass separately. Each pass in turn has casual and anti-casual passes each of which iterate through every pixel of the final image. Sharpening a pair of 8k images with such a  sequential algorithm takes around 8 seconds. To accelerate this, we again resort to OpenCV CUDA API. Since the API doesn't already have an iirLowPass filter, we follow the usual approach of sharpening an image by calculating Laplacian of the image (that detects edges) and then subtracting/adding it to the image itself. This being a CUDA implementation, gave us an acceleration of around 16x by taking only around 0.5 seconds to sharpen the final image pair. However, we see some inaccuracies in the images when compared to the one that is produced by original iirLowPass filter. We are currently looking into the ways to minimize these inaccuracies. We implemented our own CUDA kernel for iirLowPass filter but are seeing some issues with conversion and handling of abstract data types like cv::Mat that are used in current iir filter. 
 
 <h1>Current Result</h1>
+<h2> Image Renderings </h2> 
+<h3> Facebook Rendering </h3> 
+<img src="https://drive.google.com/open?id=0B_ThtGsKhnxNX3JzcGpndXEzSlE" alt="Original Rendering">
+
+<h3> Our Accelerated Rendering </h3> 
+<img src="https://drive.google.com/a/andrew.cmu.edu/file/d/0B_ThtGsKhnxNbFdtMVNXdlVwSWc/view?usp=sharing" alt="Our Result">
+
 - Mention speedup
 - Inaccuracies with performance rise
 - further analysis
