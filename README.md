@@ -92,7 +92,8 @@ In the below table, accuracy is measured as the number of pixels that are having
 </tbody>
 <table>
 
-Now that we have good speed up as proposed, we are currently working towards improving accuracy of the computations.
+<h1>Demo and Current work</h1>
+We plan to show a demo of runs on original and accelerated implementation and contrast the times taken and similarity of the results. Now that we have good speed up as proposed, we are currently working towards improving accuracy of the computations.
 
 <h1>References</h1>
 1. http://docs.opencv.org/2.4/modules/gpu/doc/introduction.html
