@@ -45,10 +45,11 @@ One other hotspot of performance is the final sharpening of the fully stitched i
 <h1>Current Result</h1>
 <h2> Image Renderings </h2> 
 <h3> Facebook Rendering </h3> 
-![Imgur](http://i.imgur.com/vK583d0.jpg)
+![Google Drive]("https://goo.gl/photos/FsWayWWXAsaV2x8q9")
 
 <h3> Our Accelerated Rendering </h3> 
-![Our Rendering]("https://goo.gl/photos/FsWayWWXAsaV2x8q9")
+![Imgur](http://i.imgur.com/vK583d0.jpg)
+
 
 <h2> Speedup Breakdown </h2> 
 We see mainly 6 different stages in the computation of the Facebook Stereo Rendering Panorama Pipeline.
