@@ -24,10 +24,12 @@ sudo make install
 sudo ln -s /usr/include/eigen3/Eigen /usr/local/include/Eigen
 sudo apt-get --assume-yes install python-numpy
 cd ~
+wget https://github.com/opencv/opencv_contrib/archive/3.2.0.zip
+tar -xvf 3.2.0.zip
 git clone https://github.com/Itseez/opencv.git
 cd opencv
 git checkout f109c01
-cmake -DWITH_IPP=OFF
+cmake -DWITH_IPP=OFF -DWITH_CUDA=ON -DCUDA_FAST_MATH=1 -DWITH_CUBLAS=1 -DENABLE_FAST_MATH=1 -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-3.2.0/modules
 make
 sudo make install
 sudo apt-get --assume-yes install python-pip

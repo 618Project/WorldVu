@@ -722,7 +722,7 @@ void generateRingOfNovelViewsAndRenderStereoSpherical(
   vector<std::thread> threads;
 
   // time_checkpoint("");
-  // ~14.8/23 seconds
+  // ~14.8/23 seconds of hotspot
   for (int leftIdx = 0; leftIdx < projectionImages.size(); ++leftIdx) {
     const int rightIdx = (leftIdx + 1) % projectionImages.size();
     novelViewGenerators[leftIdx] =
@@ -1246,8 +1246,10 @@ void renderStereoPanorama() {
   else {
     float resolution = 7680.0*4320.0;  // Applies only for 8K resolution, need to hardcode for 6K resolution if required.
     LOG(INFO) << "Correctness Failed in MT vs ST" ; 
-    LOG(INFO) << "Image1L and Image2L differ in " << diff1*100.0/resolution << " pixels " ;
-    LOG(INFO) << "Image1R and Image2R differ in " << diff2*100.0/resolution << " pixels " ;
+    LOG(INFO) << "Image1L and Image2L differ in " << cv::countNonZero(diff1)*100.0/resolution << " pixels " ;
+    LOG(INFO) << "Image1R and Image2R differ in " << cv::countNonZero(diff2)*100.0/resolution << " pixels " ;
+    LOG(INFO) << "ST time: Optical Flow: " << st_opticalFlowRuntime ;
+    LOG(INFO) << "ST time: Novel View: " << st_novelViewRuntime ;
   }
 
   if (FLAGS_save_debug_images) {

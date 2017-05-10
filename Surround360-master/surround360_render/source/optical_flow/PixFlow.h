@@ -25,6 +25,7 @@
 // #include "checkpoint.h"
 #include "PixelKernels.h"
 #include "defines.h"
+#include "SystemUtil.h"
 
 namespace surround360 {
 namespace optical_flow {
@@ -370,16 +371,21 @@ struct PixFlow : public OpticalFlowInterface {
       Mat& flow,
       DirectionHint hint) {
 
+    bool correctness_mode = true;
+    // temp_fn();
     // double start=0, end=0;
     // std::thread::id this_id = std::this_thread::get_id();
     // image gradients
     Mat I0x, I0y, I1x, I1y;
     const int kSameDepth = -1; // same depth as source image
     const int kKernelSize = 1;
-    Sobel(I0, I0x, kSameDepth, 1, 0, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
-    Sobel(I0, I0y, kSameDepth, 0, 1, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
-    Sobel(I1, I1x, kSameDepth, 1, 0, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
-    Sobel(I1, I1y, kSameDepth, 0, 1, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+    // double startCpuTime = surround360::util::getCurrTimeSec();
+    if (correctness_mode) {
+      Sobel(I0, I0x, kSameDepth, 1, 0, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+      Sobel(I0, I0y, kSameDepth, 0, 1, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+      Sobel(I1, I1x, kSameDepth, 1, 0, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+      Sobel(I1, I1y, kSameDepth, 0, 1, kKernelSize, 1, 0.0f, BORDER_REPLICATE);
+    }
 
     // blur gradients
     const cv::Size kGradientBlurSize(kGradientBlurKernelWidth, kGradientBlurKernelWidth);
@@ -387,6 +393,10 @@ struct PixFlow : public OpticalFlowInterface {
     GaussianBlur(I0y, I0y, kGradientBlurSize, kGradientBlurSigma);
     GaussianBlur(I1x, I1x, kGradientBlurSize, kGradientBlurSigma);
     GaussianBlur(I1y, I1y, kGradientBlurSize, kGradientBlurSigma);
+    // double endCpuTime = surround360::util::getCurrTimeSec();
+    // LOG(INFO) << "Time in CPU: " << (endCpuTime-startCpuTime);
+
+    //printf("Sizes: %d %d\n", kGradientBlurKernelWidth, kGradientB);
 
     if (flow.empty()) {
       // initialize to all zeros
@@ -401,12 +411,26 @@ struct PixFlow : public OpticalFlowInterface {
     Mat blurredFlow;
     GaussianBlur(
       flow,
-      blurredFlow,
+      // blurredFlow,
+      flow,
       cv::Size(kBlurredFlowKernelWidth, kBlurredFlowKernelWidth),
       kBlurredFlowSigma);
 
-    const cv::Size imgSize = I0.size();
+    // Mat old_flow;
+    // flow.copyTo(old_flow);
 
+    // double startGpuTime = surround360::util::getCurrTimeSec();
+
+    // gpu_patch(I0, I1, alpha0, alpha1, kKernelSize, kGradientBlurSize, kGradientBlurSigma,
+      //   kUpdateAlphaThreshold, flow, I0x, I0y, I1x, I1y, blurredFlow, correctness_mode);
+    // double endGpuTime = surround360::util::getCurrTimeSec();
+    // LOG(INFO) << "Time for GPU: " <<  (endGpuTime-startGpuTime);
+
+   // const cv::Size imgSize = I0.size();
+    // printf("Size: %d %d\n", imgSize.height, imgSize.width);  // 39x27 -> 663x455
+
+/*
+    double startCpuTime = surround360::util::getCurrTimeSec();
     // ******* PRIMARY HOTSPOT ********
     // sweep from top/left
     for (int y = 0; y < imgSize.height; ++y) {
@@ -437,6 +461,16 @@ struct PixFlow : public OpticalFlowInterface {
     }
     // ******* PRIMARY HOTSPOT ********
     medianBlur(flow, flow, kMedianBlurSize);
+    double endCpuTime = surround360::util::getCurrTimeSec();
+    LOG(INFO) << "Time in CPU: " << (endCpuTime-startCpuTime);
+*/
+    // Mat gpuFlow;
+    // old_flow.copyTo(gpuFlow);
+ //   double startGpuTime = surround360::util::getCurrTimeSec();
+    gpu_denseflow (I0, I1, flow, flow);
+    double endGpuTime = surround360::util::getCurrTimeSec();
+ //   LOG(INFO) << "Time for GPU: " <<  (endGpuTime-startGpuTime);
+
     lowAlphaFlowDiffusion(alpha0, alpha1, flow);
     // end = surround360::util::getCurrTimeSec();
     // std::cout << "[" << this_id << "] Time taken: " << (end-start) << std::endl;

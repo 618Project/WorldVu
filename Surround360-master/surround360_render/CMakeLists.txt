@@ -2,6 +2,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.2)
 
 PROJECT(Surround360Render CXX)
 
+# set(CMAKE_MODULE_PATH /home/ubuntu/opencv/cmake ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+# INCLUDE(/home/ubuntu/opencv/cmake/OpenCV.cmake)
+
 FIND_PACKAGE(OpenCV)
 FIND_PACKAGE(Ceres REQUIRED)
 FIND_PACKAGE(Boost COMPONENTS filesystem system)
@@ -18,7 +21,11 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/source/render)
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 INCLUDE_DIRECTORIES(/usr/local/include/eigen3)
 INCLUDE_DIRECTORIES(/usr/local/cuda/include)
+INCLUDE_DIRECTORIES(/home/ubuntu/opencv/modules)
+LINK_DIRECTORIES(/home/ubuntu/opencv/modules)
 LINK_DIRECTORIES(${CUDA_LIBRARY_DIRS})
+# set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -arch compute_20 -code sm_20)
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -arch compute_30 -code sm_30)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # required for clang, including AppleClang
@@ -200,6 +207,7 @@ TARGET_LINK_LIBRARIES(
   folly
   glog
   gflags
+  cudart
   ${OpenCV_LIBS}
   ${PLATFORM_SPECIFIC_LIBS}
 )
@@ -248,6 +256,7 @@ TARGET_LINK_LIBRARIES(
   LibJSON
   glog
   gflags
+  cudart
   ${OpenCV_LIBS}
   ${PLATFORM_SPECIFIC_LIBS}
 )
@@ -350,6 +359,7 @@ TARGET_LINK_LIBRARIES(
   LibJSON
   gflags
   glog
+  cudart
   ${OpenCV_LIBS}
   ${PLATFORM_SPECIFIC_LIBS}
 )
