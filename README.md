@@ -56,7 +56,7 @@ significantly lost image perception in spite of our speedup. We see minimal over
 ![Imgur](http://i.imgur.com/vK583d0.jpg)
 
 <h2>Comparison</h2>
-To provide a comparision of the speedup, 
+To provide a comparison of the speedup, 
 1. The original code takes **66 seconds per frame**, thus resulting in **1980 minutes for rendering 1 min of video at 30fps**.
 2. Our accelerated code, if we replace only the blocks that we have worked on ( optical flow + sharpening ) in the original code, the rendering time is **19 seconds per frame**, thus resulting in **573 minutes for rendering 1 min of video at 30fps**. 
 
