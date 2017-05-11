@@ -93,7 +93,7 @@ In the below table, Pixel intensity difference is measured as the number of pixe
     <td style="text-align: center"> 29.7 secs </td>
     <td style="text-align: center"> 9.1 secs </td>
     <td style="text-align: center"> 36.5% </td>
-    <td style="text-align: center"> L[0.958112, 0.959504, 0.956474, 0.999628] <br/>R[0.961018, 0.962793, 0.960144, 0.999633] </td>
+    <td style="text-align: center"> L (for left eye) [0.958112, 0.959504, 0.956474, 0.999628] = ~96% <br/> R (for right eye)  [0.961018, 0.962793, 0.960144, 0.999633] = ~96% </td>
     <td style="text-align: center"> 3.26x </td>
   </tr>
   <tr>
