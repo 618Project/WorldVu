@@ -1,14 +1,15 @@
 <span>
 Team: Sampath Chanda (schanda) and Harish Dixit (hdixit) <br/>
 </span>
-Please refer to Checkpoint link below to refer to Checkpoint Updates: <br/>
-<a href="https://618project.github.io/WorldVu/proposal" style="background:#D8D8D8;">Proposal</a>
-<a href="https://618project.github.io/WorldVu/checkpoint" style="background:#D8D8D8">Checkpoint</a>
 
 Final Project Report
 
 <h1>Overview</h1>
-We have accelerated the frame processing of video feed from Facebook 3D-360 camera system to produce a fully stitched image for stereo vision. Our acceleration techniques utilized CPU Multithreading and GPU acceleration to exploit pixel level parallelism for stitching frames together to produce a complete 360 degree vision.
+We have accelerated the frame processing of video feed from Facebook 3D-360 camera system to produce a fully stitched image for stereo vision. Our acceleration techniques utilized CPU Multithreading and GPU acceleration to exploit pixel level parallelism for stitching frames together to produce a complete 360 degree vision. <strong>We got a speedup of around 3.3x for optical flow phase and 86.5x for Sharpening phase of the algorithm.</strong>
+
+Please refer to Checkpoint link below to refer to Checkpoint Updates: <br/>
+<a href="https://618project.github.io/WorldVu/proposal" style="background:#D8D8D8;">Proposal</a>
+<a href="https://618project.github.io/WorldVu/checkpoint" style="background:#D8D8D8">Checkpoint</a>
 
 <h1>Motivation and Background</h1>
 <body>
@@ -74,14 +75,15 @@ We see mainly 6 different stages in the computation of the Facebook Stereo Rende
 As part of this project, we have accelerated the 2 primary hotspots, Side optical flow and Sharpening and the results are 
 as follows. All our results have been run on AWS machine (g2.2xlarge: CPU - 8 core Intel Xeon E5-2670 (Sandy Bridge) Processors and GPU - NVIDIA GPU, with 1,536 CUDA cores and 4GB video memory). Results are for a run where CPU rendering of all phases included take 66.3 seconds. <br/>
 
-In the below table, accuracy is measured as the number of pixels that are having exact pixel intensities when compared to that of the original implementation. Also, speedup is the ratio by which our accelerated implementation is faster than that of the original implementation.
+In the below table, Pixel intensity difference is measured as the number of pixels that are having exact pixel intensities when compared to that of the original implementation. But this is not considered to be a standard metric of comparison of similarity between given two images. Structural Similarity (SSIM) provides a better comparison, covering minor translational variance, slight variance in illumination condition, etc., It is widely accepted as a standard metric to evaluate similarity of a pair of images. Also, speedup is the ratio by which our accelerated implementation is faster than that of the original implementation.
 <table>
 <thead>
   <tr>
     <th style="text-align: center"> Phase </th>
     <th style="text-align: center"> Original Time </th>
     <th style="text-align: center"> Accelerated time </th>
-    <th style="text-align: center"> Accuracy </th>
+    <th style="text-align: center"> Pixel intensity diff </th>
+    <th style="text-align: center"> SSIM </th>
     <th style="text-align: center"> Speedup </th>
   </tr>
 </thead>
@@ -91,20 +93,24 @@ In the below table, accuracy is measured as the number of pixels that are having
     <td style="text-align: center"> 29.7 secs </td>
     <td style="text-align: center"> 9.1 secs </td>
     <td style="text-align: center"> 63.5% </td>
+    <td style="text-align: center"> L[0.958112, 0.959504, 0.956474, 0.999628] <br/>R[0.961018, 0.962793, 0.960144, 0.999633] </td>
     <td style="text-align: center"> 3.26x </td>
   </tr>
   <tr>
     <td style="text-align: center"> Sharpening </td>
-    <td style="text-align: center"> 27.7 secs </td>
-    <td style="text-align: center"> 1.1 secs </td>
+    <td style="text-align: center"> 17.3 secs </td>
+    <td style="text-align: center"> 0.2 secs </td>
     <td style="text-align: center"> 77% </td>
-    <td style="text-align: center"> 25.2x </td>
+    <td style="text-align: center"> [0.877589, 0.842203, 0.842524, 0] for 6k Image </td>
+    <td style="text-align: center"> 86.5x </td>
   </tr>
 </tbody>
 <table>
+Please note that in the above table, SSIM for sharpening is mentioned for 6k Image, since running SSIM on 8k resolution image is giving an out of memory issue, that we are debugging. Also, alpha channel is dropped while sharpening  and hence we see a zero value(fourth value of SSIM of sharpening).
+
 
 <h1>Demo and Current work</h1>
-We plan to show a demo of runs on original and accelerated implementation and contrast the times taken and similarity of the results. Now that we have good speed up as proposed, we are currently working towards improving accuracy of the computations.
+We plan to show a demo of runs on original and accelerated implementation and contrast the times taken and similarity of the results. We plan to test our implementation on different images and analyze more on the results.
 
 <h1>References</h1>
 1. http://docs.opencv.org/2.4/modules/gpu/doc/introduction.html
