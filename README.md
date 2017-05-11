@@ -75,7 +75,7 @@ We see mainly 6 different stages in the computation of the Facebook Stereo Rende
 As part of this project, we have accelerated the 2 primary hotspots, Side optical flow and Sharpening and the results are 
 as follows. All our results have been run on AWS machine (g2.2xlarge: CPU - 8 core Intel Xeon E5-2670 (Sandy Bridge) Processors and GPU - NVIDIA GPU, with 1,536 CUDA cores and 4GB video memory). Results are for a run where CPU rendering of all phases included take 66.3 seconds. <br/>
 
-In the below table, Pixel intensity difference is measured as the number of pixels that are having exact pixel intensities when compared to that of the original implementation. But this is not considered to be a standard metric of comparison of similarity between given two images. Structural Similarity (SSIM) provides a better comparison, covering minor translational variance, slight variance in illumination condition, etc., It is widely accepted as a standard metric to evaluate similarity of a pair of images. Also, speedup is the ratio by which our accelerated implementation is faster than that of the original implementation.
+In the below table, Pixel intensity difference is measured as the number of pixels that are having differences in exact pixel values to that of the original implementation from Facebook. But this is not considered to be a standard metric of comparison of similarity between given two images. Structural Similarity (SSIM) provides a better comparison, covering minor translational variance, slight variance in illumination condition, etc., It is widely accepted as a standard metric to evaluate similarity of a pair of images. Also, speedup is the ratio by which our accelerated implementation is faster than that of the original implementation.
 <table>
 <thead>
   <tr>
@@ -92,7 +92,7 @@ In the below table, Pixel intensity difference is measured as the number of pixe
     <td style="text-align: center"> Optical Flow </td>
     <td style="text-align: center"> 29.7 secs </td>
     <td style="text-align: center"> 9.1 secs </td>
-    <td style="text-align: center"> 63.5% </td>
+    <td style="text-align: center"> 36.5% </td>
     <td style="text-align: center"> L[0.958112, 0.959504, 0.956474, 0.999628] <br/>R[0.961018, 0.962793, 0.960144, 0.999633] </td>
     <td style="text-align: center"> 3.26x </td>
   </tr>
@@ -100,7 +100,7 @@ In the below table, Pixel intensity difference is measured as the number of pixe
     <td style="text-align: center"> Sharpening </td>
     <td style="text-align: center"> 17.3 secs </td>
     <td style="text-align: center"> 0.2 secs </td>
-    <td style="text-align: center"> 77% </td>
+    <td style="text-align: center"> 23% </td>
     <td style="text-align: center"> [0.877589, 0.842203, 0.842524, 0] for 6k Image </td>
     <td style="text-align: center"> 86.5x </td>
   </tr>
