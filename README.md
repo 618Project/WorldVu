@@ -101,7 +101,7 @@ In the below table, Pixel intensity difference is measured as the number of pixe
     <td style="text-align: center"> 17.3 secs </td>
     <td style="text-align: center"> 0.2 secs </td>
     <td style="text-align: center"> 23% </td>
-    <td style="text-align: center"> [0.877589, 0.842203, 0.842524, 0] for 6k Image </td>
+    <td style="text-align: center"> [0.877589, 0.842203, 0.842524, 0] = ~86% for 6k Image </td>
     <td style="text-align: center"> 86.5x </td>
   </tr>
 </tbody>
