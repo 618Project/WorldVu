@@ -1212,12 +1212,14 @@ void sharpenThread(Mat* sphericalImage) {
  // Compare for SSIM between '*sphericalImage' and 'color' .
 #if defined(CPU_SHARPEN) && defined(GPU_SHARPEN)  
   Mat Testspherical;
+  cv::Scalar ssim_sharp = getMSSIM(*sphericalImage, color);
   Mat diff;
   cvtColor(*sphericalImage, Testspherical, CV_BGR2GRAY);
   cvtColor( color, color, CV_BGR2GRAY);
   bitwise_xor(color, Testspherical, diff);
   bool eq = (cv::countNonZero(diff) == 0 );
-
+  
+  LOG(INFO) << "SHARPENING correctness: ssim_sharpening " << ssim_sharp ;
   if (eq) 
      LOG(INFO) << "Sharpening Correctness Passed"; 
   else
