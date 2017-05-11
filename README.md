@@ -1,9 +1,11 @@
 <span>
 Team: Sampath Chanda (schanda) and Harish Dixit (hdixit) <br/>
 </span>
-Please refer to: <br/>
+Please refer to Checkpoint link below to refer to Checkpoint Updates: <br/>
 <a href="https://618project.github.io/WorldVu/proposal" style="background:#D8D8D8;">Proposal</a>
 <a href="https://618project.github.io/WorldVu/checkpoint" style="background:#D8D8D8">Checkpoint</a>
+
+Final Project Report
 
 <h1>Overview</h1>
 We have accelerated the frame processing of video feed from Facebook 3D-360 camera system to produce a fully stitched image for stereo vision. Our acceleration techniques utilized CPU Multithreading and GPU acceleration to exploit pixel level parallelism for stitching frames together to produce a complete 360 degree vision.
