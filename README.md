@@ -5,7 +5,7 @@ Team: Sampath Chanda (schanda) and Harish Dixit (hdixit) <br/>
 Final Project Report
 
 <h1>Overview</h1>
-We have accelerated the frame processing of video feed from Facebook 3D-360 camera system to produce a fully stitched image for stereo vision. Our acceleration techniques utilized CPU Multithreading and GPU acceleration to exploit pixel level parallelism for stitching frames together to produce a complete 360 degree vision. <strong>We got a speedup of around 3.3x for optical flow phase and 86.5x for Sharpening phase of the algorithm.</strong>
+We have accelerated the frame processing of video feed from Facebook 3D-360 camera system to produce a fully stitched image for stereo vision. Our acceleration techniques utilized CPU Multithreading and GPU acceleration to exploit pixel level parallelism for stitching frames together to produce a complete 360 degree vision. <strong>We got a speedup of around 3.3x for optical flow phase and 86.5x for Sharpening phase of the algorithm at an SSIM (Structural Similarity) to the original image at 93% (on average) .</strong>
 
 Please refer to Checkpoint link below to refer to Checkpoint Updates: <br/>
 <a href="https://618project.github.io/WorldVu/proposal" style="background:#D8D8D8;">Proposal</a>
