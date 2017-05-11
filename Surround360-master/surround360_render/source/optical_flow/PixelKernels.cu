@@ -55,7 +55,7 @@ void gpu_denseflow (
   Mat& flow) {
 
   cv::cuda::GpuMat gpuI0, gpuI1, gpugpuFlow;
-  cv::cuda::GpuMat gpuI0c, gpuI1c, gpugpuFlowc, gpuResFlow;
+  cv::cuda::GpuMat gpuI0c, gpuI1c, gpuResFlow;
   cv::Mat resFlow;
   gpuI0.upload(I0);
   gpuI1.upload(I1);
@@ -65,7 +65,7 @@ void gpu_denseflow (
   Ptr<cuda::DensePyrLKOpticalFlow> lk = cv::cuda::DensePyrLKOpticalFlow::create(Size(7,7));
   gpuI0.convertTo(gpuI0c, CV_8UC1);
   gpuI1.convertTo(gpuI1c, CV_8UC1);
-  gpugpuFlow.convertTo(gpugpuFlowc, CV_32FC2);
+  gpugpuFlow.convertTo(gpuResFlow, CV_32FC2);
   lk->calc (gpuI0c, gpuI1c, gpuResFlow);
 
   gpuResFlow.download(resFlow);
