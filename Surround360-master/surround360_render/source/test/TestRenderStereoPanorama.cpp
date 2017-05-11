@@ -673,20 +673,24 @@ void st_generateRingOfNovelViewsAndRenderStereoSpherical (
   // setup parallel optical flow
   double startOpticalFlowTime = getCurrTimeSec();
   vector<NovelViewGenerator*> novelViewGenerators(projectionImages.size());
+  vector<std::thread> threads;
 
   // time_checkpoint("");
   for (int leftIdx=0; leftIdx < projectionImages.size(); ++leftIdx) {
     const int rightIdx = (leftIdx+1) % projectionImages.size();
     novelViewGenerators[leftIdx] =
       new NovelViewGeneratorAsymmetricFlow(FLAGS_side_flow_alg);
-    prepareNovelViewGeneratorThread(
+    //prepareNovelViewGeneratorThread(
+    threads.push_back(std::thread(
+      prepareNovelViewGeneratorThread,
       overlapImageWidth,
       leftIdx,
       &projectionImages[leftIdx],
       &projectionImages[rightIdx],
       novelViewGenerators[leftIdx],
-      mode);  // In which mode to run
+      mode));  // In which mode to run
   }
+  for (std::thread& t : threads) { t.join(); }
   // time_checkpoint("first");
 
   opticalFlowRuntime = getCurrTimeSec() - startOpticalFlowTime;

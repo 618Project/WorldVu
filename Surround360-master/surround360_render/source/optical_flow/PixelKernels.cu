@@ -55,8 +55,8 @@ void gpu_denseflow (
   Mat& flow) {
 
   cv::cuda::GpuMat gpuI0, gpuI1, gpugpuFlow;
-  cv::cuda::GpuMat gpuI0c, gpuI1c, gpugpuFlowc;
-  cv::Mat resFlow, resFlow0;
+  cv::cuda::GpuMat gpuI0c, gpuI1c, gpugpuFlowc, gpuResFlow;
+  cv::Mat resFlow;
   gpuI0.upload(I0);
   gpuI1.upload(I1);
   gpugpuFlow.upload(gpuFlow);
@@ -66,9 +66,9 @@ void gpu_denseflow (
   gpuI0.convertTo(gpuI0c, CV_8UC1);
   gpuI1.convertTo(gpuI1c, CV_8UC1);
   gpugpuFlow.convertTo(gpugpuFlowc, CV_32FC2);
-  lk->calc (gpuI0c, gpuI1c, gpugpuFlowc);
+  lk->calc (gpuI0c, gpuI1c, gpuResFlow);
 
-  gpugpuFlow.download(resFlow);
+  gpuResFlow.download(resFlow);
   //resFlow.convertTo(resFlow0, CV_32FC1);
 
 //  cvtColor(resFlow, resFlow, CV_BGR2GRAY);

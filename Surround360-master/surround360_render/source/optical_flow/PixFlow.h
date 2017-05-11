@@ -174,13 +174,31 @@ struct PixFlow : public OpticalFlowInterface {
           flow,
           hint);
       } else if (mode == GPU_MODE) {
-        GPU_patchMatchPropagationAndSearch(
-          pyramidI0[level],
-          pyramidI1[level],
-          pyramidAlpha0[level],
-          pyramidAlpha1[level],
-          flow,
-          hint);
+        if (level > 10) {
+          patchMatchPropagationAndSearch(
+            pyramidI0[level],
+            pyramidI1[level],
+            pyramidAlpha0[level],
+            pyramidAlpha1[level],
+            flow,
+            hint);
+        //} else if (mode == GPU_MODE) {
+        } else {
+          GPU_patchMatchPropagationAndSearch(
+            pyramidI0[level],
+            pyramidI1[level],
+            pyramidAlpha0[level],
+            pyramidAlpha1[level],
+            flow,
+            hint);
+        }
+//         GPU_patchMatchPropagationAndSearch(
+//           pyramidI0[level],
+//           pyramidI1[level],
+//           pyramidAlpha0[level],
+//           pyramidAlpha1[level],
+//           flow,
+//           hint);
       }
 
       if (usePrevFlowTemporalRegularization) {
