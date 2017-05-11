@@ -49,7 +49,7 @@ One other hotspot of performance is the final sharpening of the fully stitched i
 
 <h1>Current Result</h1>
 Below you can see the resultant renderings from Facebook and our accelerated flow. As visible from the images, we have not 
-significantly lost image perception in spite of our speedup. We see minimal overlaps in the stitching framework implementation.
+significantly lost image perception in spite of our speedup. We see minimal overlaps in the stitching framework implementation (Image comparisions are for pre-sharpening and post optical flow).
 
 <h2> Image Renderings </h2> 
 <h3> Facebook Rendering </h3> 
