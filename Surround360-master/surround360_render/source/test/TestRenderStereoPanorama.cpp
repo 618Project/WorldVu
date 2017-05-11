@@ -1169,10 +1169,13 @@ void prepareTopImagesThread(
 // sharpen the left or right eye panorama using a periodic boundary
 void sharpenThread(Mat* sphericalImage) {
 
+#ifdef GPU_SHARPEN
+  Mat sMat = *sphericalImage;
+#endif
+ 
+#ifdef CPU_SHARPEN
   const WrapBoundary<float> wrapB;
   const ReflectBoundary<float> reflectB;
-  Mat sMat = *sphericalImage;
-
   double startTimeCPU = surround360::util::getCurrTimeSec();
   Mat lowPassSphericalImage(sphericalImage->rows, sphericalImage->cols, CV_8UC3);
   
@@ -1184,15 +1187,26 @@ void sharpenThread(Mat* sphericalImage) {
   
   double endTimeCPU = surround360::util::getCurrTimeSec() - startTimeCPU; 
   LOG(INFO) << "Time in Sharpening CPU is " <<  endTimeCPU ;
-
+#endif
+  
+#ifdef GPU_SHARPEN
   double startTimeGPU = surround360::util::getCurrTimeSec();
   cvtColor(sMat, sMat, CV_BGR2BGRA);
   Mat result;
   result = sharpenGPU(sMat);
   Mat color;
   cvtColor(result, color , COLOR_BGRA2BGR, 3);
+#ifndef CPU_SHARPEN
+  *sphericalImage = color;
+#endif
+  double endTimeGPU = surround360::util::getCurrTimeSec() - startTimeGPU; 
+  LOG(INFO) << "Time in Sharpening GPU is " <<  endTimeGPU ;
+#endif 
 
-
+ // Correctness for Sharpening Below.
+ // Can add SSIM here 
+ // Compare for SSIM between '*sphericalImage' and 'color' .
+#if defined(CPU_SHARPEN) && defined(GPU_SHARPEN)  
   Mat Testspherical;
   Mat diff;
   cvtColor(*sphericalImage, Testspherical, CV_BGR2GRAY);
@@ -1208,8 +1222,7 @@ void sharpenThread(Mat* sphericalImage) {
      LOG(INFO) << "Sharpening Correctness Failed "; 
      LOG(INFO) << "Percentage Difference is " << cv::countNonZero(diff)*100/resolution; 
     }
-  double endTimeGPU = surround360::util::getCurrTimeSec() - startTimeGPU; 
-  LOG(INFO) << "Time in Sharpening GPU is " <<  endTimeGPU ;
+#endif  
 
 }
 
