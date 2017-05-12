@@ -47,11 +47,17 @@ Careful fine tuning of the argument parameters provided us the desired speedup a
 <h2>Sharpening</h2>
 One other hotspot of performance is the final sharpening of the fully stitched images (for left and right eye). The current algorithm uses an iirLowPass filter that computes horizontal and vertical pass separately and subsequently sends the filtered image to sharpening block. Each pass in turn has causal and anti-causal passes each of which iterate through every pixel of the final image. Sharpening a pair of 8k images with such a  sequential algorithm takes around 28 seconds. To accelerate this, we again resort to OpenCV CUDA API. Since the API doesn't already have an iirLowPass filter and sharpening filters. For sharpening, we follow the usual approach of sharpening an image by calculating Laplacian of the image (that detects edges) and then subtracting/adding it to the image itself. With this CUDA implementation, we are able to achieve an acceleration of around 86.5x by taking only around 0.2 seconds to sharpen the final image pair. However, we see some inaccuracies in the images when compared to the one that is produced by original sequencec of iirLowPass filter + sharpening. We are currently looking into the ways to minimize these inaccuracies. We implemented our own CUDA kernel for iirLowPass filter but are seeing some issues with conversion and handling of abstract data types like cv::Mat that are used in current iir filter. With porting the IIR Low Pass Filter to custom CUDA Kernel and then subsequently using Laplacian Sharpening, we expect the image quality to improve further. Finally, unlike our initial sequential implementation of sharpening left and right stitched images one after the other, we use utilize multi-threading to see a huge increase in speedup.
 
-<h1>Current Result</h1>
-<img src="https://c1.staticflickr.com/5/4164/34233322150_572fde9c7b_b.jpg" alt="Our kernel" style="width:304px;height:228px;">
-<img src="https://c1.staticflickr.com/5/4164/34457180352_8ab114be9f_b.jpg" alt="OpenCV CUDA API" style="width:304px;height:228px;">
-<img src="https://c1.staticflickr.com/5/4158/34577555716_ae4a276b13_b.jpg" alt="Algo" style="width:304px;height:228px;">
+Below is the visualization of time wise division of the algorithm. On left is the depiction of the original algorithm with box sizes proportional to the taken by the phase of the algorithm associated with it. On right is the depicted, the accelerated implementation.
+<img src="https://c1.staticflickr.com/5/4158/34577555716_ae4a276b13_b.jpg" alt="Algo">
 
+<h1>Results</h1>
+With the accelerated implementation, we have collected results of speedup vs. resolution of stitched images to see a pattern of how our implementation scales with quality of output. Following are the plots that shows speedup plotted against resolution for the phases - optical flow and sharpening. It can be seen that acceleration of optical flow phase scales well when higher quality image are used since more amount of pixel level parallelism can be exploited. However for sharpeniing, most of the parallelism is already being exploited even with lower quality images, and almost no improvement is seen with moving to higher quality images.
+<img src="https://c1.staticflickr.com/5/4164/34457180352_8ab114be9f_b.jpg" alt="OpenCV CUDA API" style="width:304px;height:228px;">
+
+Though we could see a significant 2-3x for optical flow phase and more than 86x for sharpening phase of the algorithm, there are slight dissimilarities in output of sharpening phase, that are measured by the standard metric of structural similarity (SSIM). Almost 93% SSIM on average is seen for output of optical flow phase but sharpening phase sees a somewhat lesser SSIM of 86%. We suspect that using a different algorithm with Laplacian, for sharpening could be the root cause of such dissimilarities. To overcome this issue, we implemented a CUDA kernel from scratch for the iirLowPassFilter based sharpening that Facebook's implementation has used. Following is the plot that shows speedup against different levels of resolution resultant from the our kernel implementation.
+<img src="https://c1.staticflickr.com/5/4164/34233322150_572fde9c7b_b.jpg" alt="Our kernel">
+
+We have noticed one issue with conversion of datatype from GpuMat to uchar, to be used inside our kernel and we have not fixed it yet.
 
 Below you can see the resultant renderings from Facebook and our accelerated flow. As visible from the images, we have not 
 significantly lost image perception in spite of our speedup. We see minimal overlaps in the stitching framework implementation (Image comparisions are for pre-sharpening and post optical flow).
@@ -114,8 +120,8 @@ In the below table, Pixel intensity difference is measured as the number of pixe
 Please note that in the above table, SSIM for sharpening is mentioned for 6k Image, since running SSIM on 8k resolution image is giving an out of memory issue, that we are debugging. Also, alpha channel is dropped while sharpening  and hence we see a zero value(fourth value of SSIM of sharpening).
 
 
-<h1>Demo and Current work</h1>
-We plan to show a demo of runs on original and accelerated implementation and contrast the times taken and similarity of the results. We plan to test our implementation on different images and analyze more on the results.
+<h1>Work division</h1>
+Equal work has been done by both the team members.
 
 <h1>References</h1>
 1. http://docs.opencv.org/2.4/modules/gpu/doc/introduction.html
