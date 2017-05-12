@@ -680,17 +680,16 @@ void st_generateRingOfNovelViewsAndRenderStereoSpherical (
     const int rightIdx = (leftIdx+1) % projectionImages.size();
     novelViewGenerators[leftIdx] =
       new NovelViewGeneratorAsymmetricFlow(FLAGS_side_flow_alg);
-    //prepareNovelViewGeneratorThread(
-    threads.push_back(std::thread(
+//    prepareNovelViewGeneratorThread(
+      threads.push_back(std::thread(
       prepareNovelViewGeneratorThread,
       overlapImageWidth,
       leftIdx,
       &projectionImages[leftIdx],
       &projectionImages[rightIdx],
       novelViewGenerators[leftIdx],
-      mode));  // In which mode to run
+      mode);  // In which mode to run
   }
-  for (std::thread& t : threads) { t.join(); }
   // time_checkpoint("first");
 
   opticalFlowRuntime = getCurrTimeSec() - startOpticalFlowTime;
@@ -1172,16 +1171,31 @@ void prepareTopImagesThread(
 
 // sharpen the left or right eye panorama using a periodic boundary
 void sharpenThread(Mat* sphericalImage) {
+ 
+   Mat lowPassSphericalImage(sphericalImage->rows, sphericalImage->cols, CV_8UC3);
 
 #ifdef GPU_SHARPEN
-  Mat sMat = *sphericalImage;
+   //*sphericalImage = lowPassSphericalImage;
+  double startTimeGPU = surround360::util::getCurrTimeSec();
+   IIRFilter(
+   *sphericalImage, 0.25f, lowPassSphericalImage);
+   Mat sMat = lowPassSphericalImage;
+  double endTimeGPU = surround360::util::getCurrTimeSec();
+//  if(!sMat.empty()){
+//  imshow("Image",sMat);
+//  }
+//  else
+//  {
+//  LOG(INFO) << "Image is Empty" ;
+//  }
+//  cvWaitKey(0);
 #endif
- 
+// 
 #ifdef CPU_SHARPEN
   const WrapBoundary<float> wrapB;
   const ReflectBoundary<float> reflectB;
   double startTimeCPU = surround360::util::getCurrTimeSec();
-  Mat lowPassSphericalImage(sphericalImage->rows, sphericalImage->cols, CV_8UC3);
+  //Mat lowPassSphericalImage(sphericalImage->rows, sphericalImage->cols, CV_8UC3);
   
   iirLowPass<WrapBoundary<float>, ReflectBoundary<float>, Vec3b>(
     *sphericalImage, 0.25f, lowPassSphericalImage, wrapB, reflectB);
@@ -1192,34 +1206,33 @@ void sharpenThread(Mat* sphericalImage) {
   double endTimeCPU = surround360::util::getCurrTimeSec() - startTimeCPU; 
   LOG(INFO) << "Time in Sharpening CPU is " <<  endTimeCPU ;
 #endif
-  
+//  
 #ifdef GPU_SHARPEN
-  double startTimeGPU = surround360::util::getCurrTimeSec();
-  cvtColor(sMat, sMat, CV_BGR2BGRA);
-  Mat result;
-  result = sharpenGPU(sMat);
-  Mat color;
-  cvtColor(result, color , COLOR_BGRA2BGR, 3);
-#ifndef CPU_SHARPEN
-  *sphericalImage = color;
-#endif
-  double endTimeGPU = surround360::util::getCurrTimeSec() - startTimeGPU; 
-  LOG(INFO) << "Time in Sharpening GPU is " <<  endTimeGPU ;
+//  double startTimeGPU = surround360::util::getCurrTimeSec();
+//  cvtColor(sMat, sMat, CV_BGR2BGRA);
+//  Mat result;
+//  result = sharpenGPU(sMat);
+  //Mat color;
+  //cvtColor(sMat, color , CV_BGRA2BGR, 3);
+//#ifndef CPU_SHARPEN
+//  *sphericalImage = color;
+//#endif
+  LOG(INFO) << "Time in Sharpening GPU is " <<  endTimeGPU - startTimeGPU;
 #endif 
-
- // Correctness for Sharpening Below.
- // Can add SSIM here 
- // Compare for SSIM between '*sphericalImage' and 'color' .
+//
+// // Correctness for Sharpening Below.
+// // Can add SSIM here 
+// // Compare for SSIM between '*sphericalImage' and 'color' .
 #if defined(CPU_SHARPEN) && defined(GPU_SHARPEN)  
   Mat Testspherical;
-  cv::Scalar ssim_sharp = getMSSIM(*sphericalImage, color);
+  //cv::Scalar ssim_sharp = getMSSIM(*sphericalImage, sMat);
   Mat diff;
   cvtColor(*sphericalImage, Testspherical, CV_BGR2GRAY);
-  cvtColor( color, color, CV_BGR2GRAY);
-  bitwise_xor(color, Testspherical, diff);
+  cvtColor( sMat, sMat, CV_BGR2GRAY);
+  bitwise_xor(sMat, Testspherical, diff);
   bool eq = (cv::countNonZero(diff) == 0 );
-  
-  LOG(INFO) << "SHARPENING correctness: ssim_sharpening " << ssim_sharp ;
+
+  //LOG(INFO) << "SHARPENING correctness: ssim_sharpening " << ssim_sharp ;
   if (eq) 
      LOG(INFO) << "Sharpening Correctness Passed"; 
   else
@@ -1229,6 +1242,7 @@ void sharpenThread(Mat* sphericalImage) {
      LOG(INFO) << "Percentage Difference is " << cv::countNonZero(diff)*100/resolution; 
     }
 #endif  
+
 
 }
 
