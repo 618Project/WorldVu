@@ -6,7 +6,7 @@ Please provide the title of your project, followed by the names of all team memb
 </span>
 
 <span style="color:black">
-The title of our project is "Insert title here".
+The title of our project is "WorldVu".
 </span>
 
 <span style="color:black">
