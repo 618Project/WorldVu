@@ -688,8 +688,9 @@ void st_generateRingOfNovelViewsAndRenderStereoSpherical (
       &projectionImages[leftIdx],
       &projectionImages[rightIdx],
       novelViewGenerators[leftIdx],
-      mode);  // In which mode to run
+      mode));  // In which mode to run
   }
+  for (std::thread& t : threads) { t.join(); }
   // time_checkpoint("first");
 
   opticalFlowRuntime = getCurrTimeSec() - startOpticalFlowTime;
