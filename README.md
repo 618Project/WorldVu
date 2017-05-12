@@ -61,7 +61,7 @@ With the accelerated implementation, we have collected results of speedup vs. re
 Though we could see a significant 2-3x for optical flow phase and more than 86x for sharpening phase of the algorithm, there are slight dissimilarities in output of sharpening phase, that are measured by the standard metric of structural similarity (SSIM). Almost 93% SSIM on average is seen for output of optical flow phase but sharpening phase sees a somewhat lesser SSIM of 86%. We suspect that using a different algorithm with Laplacian, for sharpening could be the root cause of such dissimilarities. To overcome this issue, we implemented a CUDA kernel from scratch for the iirLowPassFilter based sharpening algorithm of horizontal and vertical passes that Facebook's implementation has used. Following is the plot that shows speedup against different levels of resolution resultant from the our kernel implementation.
 <img src="https://c1.staticflickr.com/5/4164/34233322150_572fde9c7b_b.jpg" alt="Our kernel">
 
-We have noticed one issue with conversion of datatype from 3 split channel image as uchar array to an RGB Mat, to be used inside our kernel and we have not fixed it yet. We are identifying a solution for the same. 
+We have noticed one issue with conversion of datatype from 3 split channel image as uchar array to an RGB Mat, and we have not fixed it yet. We are identifying a solution for the same. 
 
 Below you can see the resultant renderings from Facebook and our accelerated flow. As visible from the images, we have not 
 significantly lost image perception in spite of our speedup. We see minimal overlaps in the stitching framework implementation (Image comparisions are for pre-sharpening and post optical flow).
