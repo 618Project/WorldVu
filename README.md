@@ -7,7 +7,7 @@ Final Project Report
 <h1>Overview</h1>
 We have accelerated the frame processing of video feed from Facebook 3D-360 camera system to produce a fully stitched image for stereo vision. Our acceleration techniques utilized CPU Multithreading and GPU acceleration to exploit pixel level parallelism for stitching frames together to produce a complete 360 degree vision. <strong>We got a speedup of around 3.3x for optical flow phase and 86.5x for Sharpening phase of the algorithm at an SSIM (Structural Similarity) to the original image at 93% (on average) .</strong>
 <p align="center">
-![Logo](https://c1.staticflickr.com/5/4179/34620525345_599de2b1ba_m.jpg = 100x100)
+<img src=https://c1.staticflickr.com/5/4179/34620525345_599de2b1ba_m.jpg>
 </p>
 ![FB](https://c1.staticflickr.com/5/4194/34620525575_a4d0d53d79_b.jpg = 200x200)
 
