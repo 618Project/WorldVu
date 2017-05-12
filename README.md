@@ -48,9 +48,9 @@ Careful fine tuning of the argument parameters provided us the desired speedup a
 One other hotspot of performance is the final sharpening of the fully stitched images (for left and right eye). The current algorithm uses an iirLowPass filter that computes horizontal and vertical pass separately and subsequently sends the filtered image to sharpening block. Each pass in turn has causal and anti-causal passes each of which iterate through every pixel of the final image. Sharpening a pair of 8k images with such a  sequential algorithm takes around 28 seconds. To accelerate this, we again resort to OpenCV CUDA API. Since the API doesn't already have an iirLowPass filter and sharpening filters. For sharpening, we follow the usual approach of sharpening an image by calculating Laplacian of the image (that detects edges) and then subtracting/adding it to the image itself. With this CUDA implementation, we are able to achieve an acceleration of around 86.5x by taking only around 0.2 seconds to sharpen the final image pair. However, we see some inaccuracies in the images when compared to the one that is produced by original sequencec of iirLowPass filter + sharpening. We are currently looking into the ways to minimize these inaccuracies. We implemented our own CUDA kernel for iirLowPass filter but are seeing some issues with conversion and handling of abstract data types like cv::Mat that are used in current iir filter. With porting the IIR Low Pass Filter to custom CUDA Kernel and then subsequently using Laplacian Sharpening, we expect the image quality to improve further. Finally, unlike our initial sequential implementation of sharpening left and right stitched images one after the other, we use utilize multi-threading to see a huge increase in speedup.
 
 <h1>Current Result</h1>
-![Our Kernel](https://ibb.co/nGUrvk)
-![OpenCV CUDA API](https://ibb.co/n2pD85)
-![Algo](https://ibb.co/gGD6T5)
+![Our Kernel](https://c1.staticflickr.com/5/4164/34233322150_572fde9c7b_b.jpg)
+![OpenCV CUDA API](https://c1.staticflickr.com/5/4164/34457180352_8ab114be9f_b.jpg)
+![Algo](https://c1.staticflickr.com/5/4158/34577555716_ae4a276b13_b.jpg)
 
 
 Below you can see the resultant renderings from Facebook and our accelerated flow. As visible from the images, we have not 
